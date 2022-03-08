@@ -1,53 +1,42 @@
 package by.epam.lab.entity;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
-public class Car {
+public class Car extends Entity {
 
-	private int id;
-	private String brand;
-	private String model;
+	private static final long serialVersionUID = 1L;
+
+	private Brand brand;
+	private int yearOfIssue;
 	private int price;
 	private String imageLink;
-	private Map<Date, Date> rentalDates;
-	private String description;
 
 	public Car() {
-		this.rentalDates = new HashMap<>();
+		super();
 	}
 
-	public Car(int id, String brand, String model, int price, String imageLink, String description) {
-		this.id = id;
+	public Car(int id, Brand brand, int yearOfIssue, int price, String imageLink) {
+		super(id);
 		this.brand = brand;
-		this.model = model;
+		this.yearOfIssue = yearOfIssue;
 		this.price = price;
 		this.imageLink = imageLink;
-		this.rentalDates = new HashMap<>();
-		this.description = description;
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public String getBrand() {
+	public Brand getBrand() {
 		return brand;
 	}
 
-	public void setBrand(String brand) {
+	public void setBrand(Brand brand) {
 		this.brand = brand;
 	}
 
-	public String getModel() {
-		return model;
+	public int getYearOfIssue() {
+		return yearOfIssue;
 	}
 
-	public void setModel(String model) {
-		this.model = model;
+	public void setYearOfIssue(int yearOfIssue) {
+		this.yearOfIssue = yearOfIssue;
 	}
 
 	public int getPrice() {
@@ -66,61 +55,31 @@ public class Car {
 		this.imageLink = imageLink;
 	}
 
-	public Map<Date, Date> getRentalDates() {
-		return rentalDates;
-	}
-
-	public void setRentalDates(Map<Date, Date> rentalDates) {
-		this.rentalDates = rentalDates;
-	}
-
-	public void addRentalDates(Date startDate, Date endDate) {
-		this.rentalDates.put(startDate, endDate);
-	}
-
-	public void removeDates(Date startDate) {
-		this.rentalDates.remove(startDate);
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public void addDate(Date startDate, Date endDate) {
-		this.rentalDates.put(startDate, endDate);
-	}
-
 	@Override
 	public int hashCode() {
-		return Objects.hash(brand, description, id, imageLink, model, price, rentalDates);
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(brand, imageLink, price, yearOfIssue);
+		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		Car other = (Car) obj;
-		return Objects.equals(brand, other.brand) && Objects.equals(description, other.description) && id == other.id
-				&& Objects.equals(imageLink, other.imageLink) && Objects.equals(model, other.model)
-				&& price == other.price && Objects.equals(rentalDates, other.rentalDates);
+		return Objects.equals(brand, other.brand) && Objects.equals(imageLink, other.imageLink) && price == other.price
+				&& yearOfIssue == other.yearOfIssue;
 	}
 
 	@Override
 	public String toString() {
-		return "Car [id=" + id + ", brand=" + brand + ", model=" + model + ", price=" + price + ", imageLink="
-				+ imageLink + ", rentalDates=" + rentalDates + ", description=" + description + "]";
+		return "Car [brand=" + brand + ", yearOfIssue=" + yearOfIssue + ", price=" + price + ", imageLink=" + imageLink
+				+ "]";
 	}
 
 	public static class Builder {
@@ -131,17 +90,17 @@ public class Car {
 		}
 
 		public Builder setCarId(int id) {
-			car.id = id;
+			this.car.setId(id);
 			return this;
 		}
 
-		public Builder setBrand(String brand) {
+		public Builder setBrand(Brand brand) {
 			car.brand = brand;
 			return this;
 		}
 
-		public Builder setModel(String model) {
-			car.model = model;
+		public Builder setYearOfIssue(int year) {
+			car.yearOfIssue = year;
 			return this;
 		}
 
@@ -152,11 +111,6 @@ public class Car {
 
 		public Builder setImageLink(String link) {
 			car.imageLink = link;
-			return this;
-		}
-
-		public Builder setDescription(String description) {
-			car.description = description;
 			return this;
 		}
 

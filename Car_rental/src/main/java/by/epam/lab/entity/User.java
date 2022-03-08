@@ -1,27 +1,48 @@
 package by.epam.lab.entity;
 
-import java.util.Objects;
+public class User extends Entity {
 
-public class User {
+	private static final long serialVersionUID = 1L;
 
-	private int id;
+	private Role role;
 	private String name;
-	private String surname;
+	private String secondName;
 	private String email;
 	private String phone;
-	private Role role;
 	private String passportNumber;
 	private String passportIdentificationNumber;
 
-	private User() {
-	}
-
 	public enum Role {
-		GUEST, USER, ADMIN;
+		USER, MANAGER;
 	}
 
-	public int getId() {
-		return this.id;
+	public User() {
+		super();
+	}
+
+	public User(int id, Role role, String name, String secondName, String email, String phone, String passportNumber,
+			String passportIdentificationNumber) {
+		super(id);
+		this.role = role;
+		this.name = name;
+		this.secondName = secondName;
+		this.email = email;
+		this.phone = phone;
+		this.passportNumber = passportNumber;
+		this.passportIdentificationNumber = passportIdentificationNumber;
+	}
+
+	public boolean isPassportDataExists() {
+		return passportNumber != null && passportNumber != "" && passportIdentificationNumber != null
+				&& passportIdentificationNumber != "";
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 	public String getName() {
@@ -32,12 +53,12 @@ public class User {
 		this.name = name;
 	}
 
-	public String getSurname() {
-		return surname;
+	public String getSecondName() {
+		return secondName;
 	}
 
-	public void setSurname(String surname) {
-		this.surname = surname;
+	public void setSecondName(String secondName) {
+		this.secondName = secondName;
 	}
 
 	public String getEmail() {
@@ -56,14 +77,6 @@ public class User {
 		this.phone = phone;
 	}
 
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
 	public String getPassportNumber() {
 		return passportNumber;
 	}
@@ -80,41 +93,6 @@ public class User {
 		this.passportIdentificationNumber = passportIdentificationNumber;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public boolean isPassportDataExists() {
-		return passportNumber != null && this.passportIdentificationNumber != null;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(email, id, name, passportIdentificationNumber, passportNumber, phone, role, surname);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		return Objects.equals(email, other.email) && id == other.id && Objects.equals(name, other.name)
-				&& Objects.equals(passportIdentificationNumber, other.passportIdentificationNumber)
-				&& Objects.equals(passportNumber, other.passportNumber) && Objects.equals(phone, other.phone)
-				&& role == other.role && Objects.equals(surname, other.surname);
-	}
-
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", surname=" + surname + ", email=" + email + ", phone=" + phone
-				+ ", role=" + role + ", passportNumber=" + passportNumber + ", passportIdentificationNumber="
-				+ passportIdentificationNumber + "]";
-	}
-
 	public static class Builder {
 		private User user;
 
@@ -123,7 +101,7 @@ public class User {
 		}
 
 		public Builder setUserID(int userId) {
-			user.id = userId;
+			user.setId(userId);
 			return this;
 		}
 
@@ -132,8 +110,8 @@ public class User {
 			return this;
 		}
 
-		public Builder setSurname(String surname) {
-			user.surname = surname;
+		public Builder setSecondName(String secondName) {
+			user.secondName = secondName;
 			return this;
 		}
 

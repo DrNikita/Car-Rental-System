@@ -1,0 +1,11 @@
+@charset "ISO-8859-1";
+
+.imgBox {
+	height: 400 px;
+	width: 400 px;
+}
+
+.cars { 
+	width: 20px;
+	background: red;
+}

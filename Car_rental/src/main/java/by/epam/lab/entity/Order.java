@@ -2,69 +2,72 @@ package by.epam.lab.entity;
 
 import java.util.Date;
 import java.util.Objects;
+import java.util.Optional;
 
-public class Order {
-	private int userId;
-	private int carId;
-	private Date rentalStartDate;
-	private Date rentalEndDate;
+public class Order extends Entity {
+
+	private static final long serialVersionUID = 1L;
+
+	private User user;
+	private Car car;
+	private Date startDate;
+	private Date endDate;
 	private int price;
-	private boolean isAccepted;
-	private String refusalReason;
+	private ConfirmationStatus confirmationStatus;
+	private String rejectionReason;
 	private boolean isPaid;
-	private boolean isReturned;
-	private boolean isDamaged;
-	private int repairAmount;
+
+	public enum ConfirmationStatus {
+		CONSIDERED, CONFIRMED, REJECTED;
+	}
 
 	public Order() {
-	}
-
-	public Order(int userId, int carId, Date rentalStartDate, Date rentalEndDate, int price, boolean isAccepted,
-			String refusalReason, boolean isPaid, boolean isReturned, boolean isDamaged, int repairAmount) {
 		super();
-		this.userId = userId;
-		this.carId = carId;
-		this.rentalStartDate = rentalStartDate;
-		this.rentalEndDate = rentalEndDate;
+	}
+
+	public Order(int id, User user, Car car, Date startDate, Date endDate, int price,
+			ConfirmationStatus confirmationStatus, String rejectionReason, boolean isPaid) {
+		super(id);
+		this.user = user;
+		this.car = car;
+		this.startDate = startDate;
+		this.endDate = endDate;
 		this.price = price;
-		this.isAccepted = isAccepted;
-		this.refusalReason = refusalReason;
+		this.confirmationStatus = confirmationStatus;
+		this.rejectionReason = rejectionReason;
 		this.isPaid = isPaid;
-		this.isReturned = isReturned;
-		this.isDamaged = isDamaged;
-		this.repairAmount = repairAmount;
 	}
 
-	public int getUserId() {
-		return userId;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
-	public int getCarId() {
-		return carId;
+	public Car getCar() {
+		return car;
 	}
 
-	public void setCarId(int carId) {
-		this.carId = carId;
+	public void setCar(Car car) {
+		this.car = car;
 	}
 
-	public Date getRentalStartDate() {
-		return rentalStartDate;
+	public Date getStartDate() {
+		return startDate;
 	}
 
-	public void setRentalStartDate(Date rentalStartDate) {
-		this.rentalStartDate = rentalStartDate;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
 
-	public Date getRentalEndDate() {
-		return rentalEndDate;
+	public Date getEndDate() {
+		return endDate;
 	}
 
-	public void setRentalEndDate(Date rentalEndDate) {
-		this.rentalEndDate = rentalEndDate;
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 
 	public int getPrice() {
@@ -75,82 +78,115 @@ public class Order {
 		this.price = price;
 	}
 
-	public boolean isAccepted() {
-		return isAccepted;
+	public ConfirmationStatus getConfirmationStatus() {
+		return confirmationStatus;
 	}
 
-	public void setAccepted(boolean isAccepted) {
-		this.isAccepted = isAccepted;
+	public void setConfirmationStatus(ConfirmationStatus confirmationStatus) {
+		this.confirmationStatus = confirmationStatus;
 	}
 
-	public String getRefusalReason() {
-		return refusalReason;
+	public String getRejectionReason() {
+		return rejectionReason;
 	}
 
-	public void setRefusalReason(String refusalReason) {
-		this.refusalReason = refusalReason;
+	public void setRejectionReason(String rejectionReason) {
+		this.rejectionReason = rejectionReason;
 	}
 
-	public boolean isPaid() {
+	public boolean getIsPaidStatus() {
 		return isPaid;
 	}
 
-	public void setPaid(boolean isPaid) {
+	public void setIsPaidStatus(boolean isPaid) {
 		this.isPaid = isPaid;
-	}
-
-	public boolean isReturned() {
-		return isReturned;
-	}
-
-	public void setReturned(boolean isReturned) {
-		this.isReturned = isReturned;
-	}
-
-	public boolean isDamaged() {
-		return isDamaged;
-	}
-
-	public void setDamaged(boolean isDamaged) {
-		this.isDamaged = isDamaged;
-	}
-
-	public int getRepairAmount() {
-		return repairAmount;
-	}
-
-	public void setRepairAmount(int repairAmount) {
-		this.repairAmount = repairAmount;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(carId, isAccepted, isDamaged, isPaid, isReturned, price, refusalReason, rentalEndDate,
-				rentalStartDate, repairAmount, userId);
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result
+				+ Objects.hash(car, confirmationStatus, endDate, isPaid, price, rejectionReason, startDate, user);
+		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		Order other = (Order) obj;
-		return carId == other.carId && isAccepted == other.isAccepted && isDamaged == other.isDamaged
-				&& isPaid == other.isPaid && isReturned == other.isReturned && price == other.price
-				&& Objects.equals(refusalReason, other.refusalReason)
-				&& Objects.equals(rentalEndDate, other.rentalEndDate)
-				&& Objects.equals(rentalStartDate, other.rentalStartDate) && repairAmount == other.repairAmount
-				&& userId == other.userId;
+		return Objects.equals(car, other.car) && confirmationStatus == other.confirmationStatus
+				&& Objects.equals(endDate, other.endDate) && isPaid == other.isPaid && price == other.price
+				&& Objects.equals(rejectionReason, other.rejectionReason) && Objects.equals(startDate, other.startDate)
+				&& Objects.equals(user, other.user);
 	}
 
 	@Override
 	public String toString() {
-		return "Order [userId=" + userId + ", carId=" + carId + ", rentalStartDate=" + rentalStartDate
-				+ ", rentalEndDate=" + rentalEndDate + ", price=" + price + ", isAccepted=" + isAccepted
-				+ ", refusalReason=" + refusalReason + ", isPaid=" + isPaid + ", isReturned=" + isReturned
-				+ ", isDamaged=" + isDamaged + ", repairAmount=" + repairAmount + "]";
+		return "Order [user=" + user + ", car=" + car + ", startDate=" + startDate + ", endDate=" + endDate + ", price="
+				+ price + ", confirmationStatus=" + confirmationStatus + ", rejectionReason=" + rejectionReason
+				+ ", isPaid=" + isPaid + "]";
+	}
+
+	public static class Builder {
+		private Order order;
+
+		public Builder() {
+			order = new Order();
+		}
+
+		public Builder setOrderId(int id) {
+			order.setId(id);
+			return this;
+		}
+
+		public Builder setUser(User user) {
+			order.user = user;
+			return this;
+		}
+
+		public Builder setCar(Car car) {
+			order.car = car;
+			return this;
+		}
+
+		public Builder setStartDate(Date date) {
+			order.startDate = date;
+			return this;
+		}
+
+		public Builder setEndDate(Date date) {
+			order.endDate = date;
+			return this;
+		}
+
+		public Builder setPrice(int price) {
+			order.price = price;
+			return this;
+		}
+
+		public Builder setIsPaidStatus(boolean status) {
+			order.isPaid = status;
+			return this;
+		}
+
+		public Builder setConfirmationStatus(ConfirmationStatus status) {
+			order.confirmationStatus = status;
+			return this;
+		}
+
+		public Builder setRejectionReason(String rejectionReason) {
+			order.rejectionReason = rejectionReason;
+			return this;
+		}
+
+		public Order build() {
+			return order;
+		}
 	}
 }

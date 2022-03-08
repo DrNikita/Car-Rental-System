@@ -5,10 +5,10 @@
 	<appender name="TxtAppender"
 		class="org.apache.log4j.FileAppender">
 		<param name="Encoding" value="UTF-8" />
-		<param name="File" value="logs/log.txt" />
+		<param name="File" value="/logs/log.txt" />
 		<layout class="org.apache.log4j.SimpleLayout" />
 	</appender>
-	<logger name="by.bsu">
+	<logger name="by.epam">
 		<level value="debug" />
 	</logger>
 	<root>

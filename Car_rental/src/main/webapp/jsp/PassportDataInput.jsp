@@ -9,29 +9,20 @@
 <title>Passport data</title>
 </head>
 <body>
-	<div class="products" style="background-color: #E6F9E6;">
+	<div style="margin: 5px">
 
-		<p class="tab" align="center" style="color: brown;" id="message">Login
-			Here</p>
-		<br>
-		<div class="tab" align="center">
-
-			<div style="margin: 5px">
-
-				<form action="/passportData" method="post">
-					Passport number: <input type="text" name="passportNumber"
-						style="font-size: 15px; font-weight: normal;"
-						placeholder="Enter Email-Id" required><br /> <br />
-					Passport identification number: <input type="text"
-						name="passportIdentificationNumber"
-						style="font-size: 15px; font-weight: normal;"
-						placeholder="Enter Password" required><br /> <br />
-				</form>
-			</div>
-		</div>
-		<div class="tab" style="margin-top: 10px; text-align: center">
-			<a href="<c:url value="/passportData" />">Next</a>
-		</div>
+		<form action="<c:url value="/controller"/>">
+			<input type="hidden" name="command" value="add_passport_data">
+			Passport number: <input type="text" name="passportNumber"
+				style="font-size: 15px; font-weight: normal;" required><br />
+			<br /> Passport identification number: <input type="text"
+				name="passportIdNumber"
+				style="font-size: 15px; font-weight: normal;" required><br />
+			<br /> <input type="submit" value="Next">
+		</form>
 	</div>
+
+	<div class="tab" style="margin-top: 10px; text-align: center"></div>
+
 </body>
 </html>

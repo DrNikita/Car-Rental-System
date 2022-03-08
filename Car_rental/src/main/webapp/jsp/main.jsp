@@ -8,19 +8,23 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>main</title>
-<link href="style.css" rel="stylesheet">
+<link href="<c:url value="/css/main.css"/>" rel="stylesheet">
 </head>
 <body>
 	<c:forEach var="car" items="${cars}" varStatus="status">
 		<div class="card">
 			<div class="imgBox">
-				<img src="${car.getImageLink()}">
+				<img src="<c:url value="${car.getImageLink()}"/>">
 			</div>
 			<div class="contentBox">
 				<h3>
-					<p>${car.getBrand()}${car.getModel()}</p>
+					<p></p>
 				</h3>
-				<a href="<c:url value="/carDescription?carId=${car.getId()}"/>">More</a>
+				<form action="<c:url value="/controller"/>">
+					<input type="hidden" name="command" value="car_description_page">
+					<input type="hidden" name="carId" value="${car.getId()}"> <input
+						type="submit" value="More">
+				</form>
 			</div>
 		</div>
 	</c:forEach>

@@ -6,26 +6,25 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>${car.getBrand()} ${car.getModel()}</title>
+<title></title>
+<link href="<c:url value="${contextPath}/css/main.css" />">
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 </head>
 <body>
-	<div class="imgBox">
-		<img src="${car.getImageLink()}">
+	<div>
+		<div class="imgBox">
+			<img src="<c:url value="${car.getImageLink()}" />">
+		</div>
+
+		<div class="description">
+			<h1>${user.getId()}</h1>
+			<h2>${car.getYearOfIssue()}</h2>
+			<h2>${car.getPrice()}$$</h2>
+		</div>
+		<form action="<c:url value="/controller" />">
+			<input type="hidden" name="command" value="check_passport_data">
+			<input type="submit" value="Book car">
+		</form>
 	</div>
-	<div></div>
-
-	<h1>${car.getDescription()}</h1>
-	<h2>${car.getRentalDates()}</h2>
-
-	<c:set var="nextPage" scope="session"
-		value="${contextPath}/jsp/BookingForm.jsp" />
-
-	<c:if test="${!user.isPassportDataExists()}">
-		<c:set var="nextPage" scope="session"
-			value="${contextPath}/jsp/PassportDataInput.jsp" />
-	</c:if>
-
-	<a href="${nextPage}">Book</a>
 </body>
 </html>

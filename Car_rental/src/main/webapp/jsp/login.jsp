@@ -15,8 +15,7 @@
 		<h1>Car rental</h1>
 	</div>
 
-	<form name="loginForm" method="POST"
-		action="<c:url value="/controller" />">
+	<form action="<c:url value="/controller" />">
 
 		<input type="hidden" name="command" value="login" /> Email: <br /> <input
 			type="text" name="email" value="" /> <br /> Password: <br /> <input
