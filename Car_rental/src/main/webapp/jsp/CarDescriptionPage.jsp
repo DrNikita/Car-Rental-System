@@ -17,13 +17,13 @@
 		</div>
 
 		<div class="description">
-			<h1>${user.getId()}</h1>
-			<h2>${car.getYearOfIssue()}</h2>
-			<h2>${car.getPrice()}$$</h2>
+			<h1>${car.getYearOfIssue()}</h1>
+			<h1>${car.getPrice()}$$</h1>
 		</div>
 		<form action="<c:url value="/controller" />">
 			<input type="hidden" name="command" value="check_passport_data">
-			<input type="submit" value="Book car">
+			<input type="hidden" name="carId" value="${car.getId()}"> <input
+				type="submit" value="Book car">
 		</form>
 	</div>
 </body>

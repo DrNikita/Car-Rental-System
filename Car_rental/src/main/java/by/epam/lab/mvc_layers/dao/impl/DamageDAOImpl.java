@@ -8,10 +8,12 @@ import java.util.Optional;
 
 import by.epam.lab.entity.Damage;
 import by.epam.lab.exceptions.DAOException;
+import by.epam.lab.mvc_layers.dao.AbstractDAO;
+import by.epam.lab.mvc_layers.dao.AbstractDamageDAO;
 
-public class DamageDAO extends AbstractDAO<Damage> {
+public class DamageDAOImpl extends AbstractDamageDAO {
 
-	public DamageDAO(Connection connection) {
+	public DamageDAOImpl(Connection connection) {
 		super(connection);
 	}
 

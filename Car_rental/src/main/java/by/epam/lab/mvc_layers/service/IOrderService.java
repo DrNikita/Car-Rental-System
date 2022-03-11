@@ -5,44 +5,44 @@ import java.util.List;
 import java.util.Optional;
 
 import by.epam.lab.entity.Order;
-import by.epam.lab.exceptions.DAOException;
+import by.epam.lab.exceptions.ServiceLayerException;
 
 public interface IOrderService extends IService<Order> {
 
 	@Override
-	List<Order> getAll() throws DAOException;
+	List<Order> getAll() throws ServiceLayerException;
 
-	List<Order> getOrdersOfUser(int id) throws DAOException;
+	List<Order> getOrdersOfUser(int id) throws ServiceLayerException;
 
-	List<Order> getOrdersForCar(int id) throws DAOException;
+	List<Order> getOrdersForCar(int id) throws ServiceLayerException;
 
-	List<Order> getPaidOrders() throws DAOException;
+	List<Order> getPaidOrders() throws ServiceLayerException;
 
-	List<Order> getUnpaidOrders() throws DAOException;
+	List<Order> getUnpaidOrders() throws ServiceLayerException;
 
-	List<Order> getNotConsidered() throws DAOException;
-
-	@Override
-	Optional<Order> getEntityById(int id) throws DAOException;
-
-	boolean confirmOrder(int id) throws DAOException;
-
-	boolean rejectOrder(int id, String reason) throws DAOException;
-
-	boolean changeStartDate(Date date, int id) throws DAOException;
-
-	boolean changeEndDate(Date date, int id) throws DAOException;
-
-	boolean changeConfirmationStatus(int status, int orderId) throws DAOException;
-
-	boolean changeIsPaidStatus(boolean status, int orderId) throws DAOException;
-
-	boolean changeCar(int carId, int orderId) throws DAOException;
-
-	boolean changePrice(int price, int orderId) throws DAOException;
-
-	boolean addOrder(Order order) throws DAOException;
+	List<Order> getNotConsidered() throws ServiceLayerException;
 
 	@Override
-	boolean delete(int id) throws DAOException;
+	Optional<Order> getEntityById(int id) throws ServiceLayerException;
+
+	boolean confirmOrder(int id) throws ServiceLayerException;
+
+	boolean rejectOrder(int id, String reason) throws ServiceLayerException;
+
+	boolean changeStartDate(Date date, int id) throws ServiceLayerException;
+
+	boolean changeEndDate(Date date, int id) throws ServiceLayerException;
+
+	boolean changeConfirmationStatus(int status, int orderId) throws ServiceLayerException;
+
+	boolean changeIsPaidStatus(boolean status, int orderId) throws ServiceLayerException;
+
+	boolean changeCar(int carId, int orderId) throws ServiceLayerException;
+
+	boolean changePrice(int price, int orderId) throws ServiceLayerException;
+
+	boolean addOrder(Order order) throws ServiceLayerException;
+
+	@Override
+	boolean delete(int id) throws ServiceLayerException;
 }

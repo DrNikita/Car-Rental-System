@@ -15,10 +15,11 @@ import org.apache.logging.log4j.Logger;
 import by.epam.lab.entity.User;
 import by.epam.lab.entity.User.Role;
 import by.epam.lab.exceptions.DAOException;
+import by.epam.lab.mvc_layers.dao.AbstractUserDAO;
 import by.epam.lab.utils.Encode;
 import by.epam.lab.utils.DAOConstants;
 
-public class UserDAO extends AbstractDAO<User> {
+public class UserDAOImpl extends AbstractUserDAO {
 
 	private static final Logger logger = LogManager.getLogger();
 
@@ -31,7 +32,7 @@ public class UserDAO extends AbstractDAO<User> {
 	private static final String SQL_CHANGE_PASSPORT_DATA = "UPDATE users SET passport_number=?,passport_identification_number=? where id_user=?";
 	private static final String SQL_FIND_USER_BY_EMAIL_PASSWORD = "SELECT id_user,role_id,name,second_name,email,phone,passport_number,passport_identification_number FROM users WHERE (email=?) AND (password=?)";
 
-	public UserDAO(Connection connection) {
+	public UserDAOImpl(Connection connection) {
 		super(connection);
 	}
 
@@ -39,9 +40,9 @@ public class UserDAO extends AbstractDAO<User> {
 	public Optional<User> getEntityById(int id) throws DAOException {
 		logger.log(Level.INFO, "Find car by id = " + id);
 
-		Optional<User> user = Optional.empty();
-
 		try (PreparedStatement statement = connection.prepareStatement(SQL_FIND_USER_BY_ID)) {
+
+			Optional<User> user = Optional.empty();
 
 			statement.setInt(1, id);
 
@@ -51,42 +52,44 @@ public class UserDAO extends AbstractDAO<User> {
 				user = Optional.of(create(resultSet));
 			}
 
+			return user;
+
 		} catch (SQLException e) {
 			throw new DAOException("Dao exception", e);
 		}
-
-		return user;
 	}
 
 	@Override
 	public List<User> getAll() throws DAOException {
 		logger.log(Level.INFO, "Find all users");
 
-		List<User> users = new ArrayList<User>();
-
 		try (
 
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery(SQL_FIND_ALL_USERS)) {
 
+			List<User> users = new ArrayList<User>();
+
 			while (resultSet.next()) {
 				users.add(create(resultSet));
 			}
+
+			return users;
 
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQLException in findAll: " + e.getMessage() + " : " + e.getErrorCode());
 			throw new DAOException("Dao exception", e);
 		}
-
-		return users;
 	}
 
+	@Override
 	public List<User> getUsersByRole(Role role) throws DAOException {
 
 		logger.log(Level.INFO, "Find user by role, role=  " + role);
-		List<User> users = new ArrayList<User>();
 
 		try (PreparedStatement statement = connection.prepareStatement(SQL_FIND_USERS_BY_ROLE)) {
+
+			List<User> users = new ArrayList<User>();
 
 			statement.setString(1, role.name());
 			ResultSet resultSet = statement.executeQuery();
@@ -95,48 +98,49 @@ public class UserDAO extends AbstractDAO<User> {
 				users.add(create(resultSet));
 			}
 
+			return users;
+
 		} catch (SQLException e) {
 			throw new DAOException("Dao exception", e);
 		}
-
-		return users;
 	}
 
+	@Override
 	public Optional<String> getPasswordByEmail(String email) throws DAOException {
 
 		logger.log(Level.INFO, "Find password by email, email=  " + email);
-		Optional<String> optionalPassword;
-		String password = null;
 
 		try (PreparedStatement statement = connection.prepareStatement(SQL_FIND_PASSWORD_BY_EMAIL)) {
 			logger.log(Level.DEBUG, "in try block");
+
+			Optional<String> optionalPassword = Optional.empty();
 
 			statement.setString(1, email);
 			ResultSet resultSet = statement.executeQuery();
 
 			if (resultSet.next()) {
-				password = resultSet.getString(DAOConstants.USER_PASSWORD);
+				String password = resultSet.getString(DAOConstants.USER_PASSWORD);
 				optionalPassword = Optional.of(password);
 				logger.log(Level.INFO, "password=" + password);
 
-			} else {
-				optionalPassword = Optional.empty();
 			}
+
+			return optionalPassword;
 
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQLException in method findPasswordByLogin " + e.getMessage());
 			throw new DAOException("Dao exception", e);
 		}
-
-		return optionalPassword;
 	}
 
+	@Override
 	public Optional<User> getUserByEmail(String email) throws DAOException {
 
 		logger.log(Level.INFO, "Find user by email, email=  " + email);
-		Optional<User> optionalUser;
 
 		try (PreparedStatement statement = connection.prepareStatement(SQL_FIND_USER_BY_EMAIL)) {
+
+			Optional<User> optionalUser = Optional.empty();
 
 			logger.log(Level.DEBUG, "in try block, login");
 			statement.setString(1, email);
@@ -151,14 +155,15 @@ public class UserDAO extends AbstractDAO<User> {
 				optionalUser = Optional.empty();
 			}
 
+			return optionalUser;
+
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
 			throw new DAOException("Dao exception in method findUserByEmail", e);
 		}
-
-		return optionalUser;
 	}
 
+	@Override
 	public Optional<User> getUserByEmailPassword(String email, String password) throws DAOException {
 
 		try (PreparedStatement statement = connection.prepareStatement(SQL_FIND_USER_BY_EMAIL_PASSWORD)) {
@@ -179,6 +184,7 @@ public class UserDAO extends AbstractDAO<User> {
 		}
 	}
 
+	@Override
 	public boolean addUser(User user, String password) throws DAOException {
 
 		logger.log(Level.INFO, "Try to add user in db" + user);
@@ -202,31 +208,37 @@ public class UserDAO extends AbstractDAO<User> {
 		}
 	}
 
+	@Override
 	public boolean changeName(String name, int id) throws DAOException {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
+	@Override
 	public boolean changeSecondName(String surname, int id) throws DAOException {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
+	@Override
 	public boolean changeEmail(String email, int id) throws DAOException {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
+	@Override
 	public boolean changePhone(String phone, int id) throws DAOException {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
+	@Override
 	public boolean changePassword(String password, int id) throws DAOException {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
+	@Override
 	public boolean changePassportData(String passportNumber, String passportIdentificationNumberr, int id)
 			throws DAOException {
 		try (PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_PASSPORT_DATA)) {

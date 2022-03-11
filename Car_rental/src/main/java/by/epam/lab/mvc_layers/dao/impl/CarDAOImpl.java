@@ -16,25 +16,26 @@ import org.apache.logging.log4j.Logger;
 import by.epam.lab.entity.Brand;
 import by.epam.lab.entity.Car;
 import by.epam.lab.exceptions.DAOException;
+import by.epam.lab.mvc_layers.dao.AbstractCarDAO;
+import by.epam.lab.mvc_layers.dao.AbstractDAO;
 import by.epam.lab.utils.DAOConstants;
 
-public class CarDAO extends AbstractDAO<Car> {
+public class CarDAOImpl extends AbstractCarDAO {
 
 	private static final Logger logger = LogManager.getLogger();
 
 	private static final String SQL_GET_ALL_CARS = "SELECT * FROM car_park";
 	private static final String SQL_GET_CAR_BY_ID = "SELECT id_car,brand_id,year_of_issue,price,image_link FROM car_park WHERE id_car=?";
-	private static final String SQL_GET_BRAND = "SELECT brand FROM brands WHERE id_brand=?";
-	private static final String SQL_GET_MODEL = "SELECT model FROM brands WHERE id_brand=?";
 	private static final String SQL_SET_PRICE = "UPDATE car_park SET price=? where id_car=?";
 	private static final String SQL_SET_IMAGE_LINK = "UPDATE car_park SET image_link=? where id_car=?";
 	private static final String SQL_DELETE_CAR = "DELETE FROM car_park WHERE id_car=?";
 	private static final String SQL_ADD_CAR = "INSERT INTO car_park (brand_id,year_of_issue,price,image_link) values(?,?,?,?)";
 
-	public CarDAO(Connection connection) {
+	public CarDAOImpl(Connection connection) {
 		super(connection);
 	}
 
+	@Override
 	public boolean addCar(Car car) throws DAOException {
 		logger.log(Level.INFO, "Adding car to the db" + car);
 
@@ -53,52 +54,13 @@ public class CarDAO extends AbstractDAO<Car> {
 		}
 	}
 
-	public String getBrand(int idBrand) throws DAOException {
-
-		String brand = "";
-
-		try (PreparedStatement statement = connection.prepareStatement(SQL_GET_BRAND)) {
-
-			statement.setInt(1, idBrand);
-			ResultSet resultSet = statement.executeQuery();
-
-			if (resultSet.next()) {
-				brand = resultSet.getString(DAOConstants.BRAND);
-			}
-
-			return brand;
-
-		} catch (SQLException e) {
-			throw new DAOException(e);
-		}
-	}
-
-	public String getModel(int idBrand) throws DAOException {
-
-		String model = "";
-
-		try (PreparedStatement statement = connection.prepareStatement(SQL_GET_MODEL)) {
-
-			statement.setInt(1, idBrand);
-			ResultSet resultSet = statement.executeQuery();
-
-			if (resultSet.next()) {
-				model = resultSet.getString(DAOConstants.MODEL);
-			}
-
-			return model;
-
-		} catch (SQLException e) {
-			throw new DAOException(e);
-		}
-	}
-
+	@Override
 	public Optional<Car> getEntityById(int id) throws DAOException {
 		logger.log(Level.INFO, "Find car by id = " + id);
 
-		Optional<Car> car = null;
-
 		try (PreparedStatement statement = connection.prepareStatement(SQL_GET_CAR_BY_ID)) {
+
+			Optional<Car> car = Optional.empty();
 
 			statement.setInt(1, id);
 			ResultSet resultSet = statement.executeQuery();
@@ -106,23 +68,23 @@ public class CarDAO extends AbstractDAO<Car> {
 				car = Optional.of(create(resultSet));
 			}
 
+			return car;
+
 		} catch (SQLException e) {
 			throw new DAOException("Dao exception", e);
 		}
-
-		return car;
 	}
 
 	@Override
 	public List<Car> getAll() throws DAOException {
 		logger.log(Level.INFO, "Find all cars");
 
-		List<Car> cars = new ArrayList<Car>();
-
 		try (
 
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery(SQL_GET_ALL_CARS)) {
+
+			List<Car> cars = new ArrayList<Car>();
 
 			while (resultSet.next()) {
 				cars.add(create(resultSet));
@@ -136,6 +98,7 @@ public class CarDAO extends AbstractDAO<Car> {
 		}
 	}
 
+	@Override
 	public boolean changeCarPrice(int price, int id) throws DAOException {
 		try (PreparedStatement statement = connection.prepareStatement(SQL_SET_PRICE)) {
 
@@ -149,6 +112,7 @@ public class CarDAO extends AbstractDAO<Car> {
 		}
 	}
 
+	@Override
 	public boolean changeCarImage(String link, int id) throws DAOException {
 		try (PreparedStatement statement = connection.prepareStatement(SQL_SET_IMAGE_LINK)) {
 
@@ -178,7 +142,7 @@ public class CarDAO extends AbstractDAO<Car> {
 	@Override
 	public Car create(ResultSet resultSet) throws DAOException, SQLException {
 
-		AbstractDAO<Brand> brandDao = new BrandDAO(connection);
+		AbstractDAO<Brand> brandDao = new BrandDAOImpl(connection);
 
 		int carId = resultSet.getInt(DAOConstants.ID_CAR);
 		int brandId = resultSet.getInt(DAOConstants.CAR_BRAND_ID);

@@ -11,7 +11,8 @@ public class ServletPaths {
 	public static final String CAR_DESCRIPTION_PAGE = "/jsp/CarDescriptionPage.jsp";
 	public static final String INPUT_PASSPORT_DATA_PAGE = "/jsp/PassportDataInput.jsp";
 	public static final String INPUT_DATES_PAGE = "/jsp/InputDates.jsp";
-
+	public static final String LOGIN_PAGE="/jsp/login.jsp";
+	
 	public static final String MAIN = "/controller?command=main_page";
 	public static final String PERSONAL = "/controller?command=to_personal_page";
 	public static final String SIGN_IN = "/controller?command=to_sign_in";

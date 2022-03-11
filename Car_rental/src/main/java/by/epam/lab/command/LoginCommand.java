@@ -8,13 +8,12 @@ import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.tomcat.util.bcel.classfile.Constant;
 
 import by.epam.lab.controller.Router;
 import by.epam.lab.entity.User;
-import by.epam.lab.exceptions.DAOException;
-import by.epam.lab.mvc_layers.dao.impl.UserDAO;
+import by.epam.lab.exceptions.ServiceLayerException;
 import by.epam.lab.mvc_layers.service.IService;
+import by.epam.lab.mvc_layers.service.impl.UserServiceImpl;
 import by.epam.lab.utils.ConfigurationManager;
 import by.epam.lab.utils.DAOConstants;
 import by.epam.lab.utils.MessageManager;
@@ -27,7 +26,7 @@ public class LoginCommand implements ActionCommand {
 	@Override
 	public Router execute(HttpServletRequest request) {
 
-		IService<User> userDao = new UserDAO();
+		IService<User> userDao = new UserServiceImpl();
 		HttpSession session = request.getSession();
 		String email = request.getParameter(DAOConstants.USER_EMAIL);
 		String password = request.getParameter(DAOConstants.USER_PASSWORD);
@@ -35,7 +34,7 @@ public class LoginCommand implements ActionCommand {
 		Router router = new Router();
 
 		try {
-			Optional<User> user = (((UserDAO) userDao).getUserByEmailPassword(email, password));
+			Optional<User> user = (((UserServiceImpl) userDao).getUserByEmailPassword(email, password));
 			logger.log(Level.INFO, "trying to find user by entered email: " + email);
 
 			if (user.isPresent()) {
@@ -48,7 +47,7 @@ public class LoginCommand implements ActionCommand {
 				router = new Router(ConfigurationManager.getProperty("path.page.index"));
 			}
 
-		} catch (DAOException e) {
+		} catch (ServiceLayerException e) {
 			logger.log(Level.ERROR, "DAOException in method execute " + e);
 			request.setAttribute("nullPage", "Page not found. Business logic error.");
 		}

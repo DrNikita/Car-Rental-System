@@ -10,9 +10,9 @@ import org.apache.logging.log4j.Logger;
 
 import by.epam.lab.controller.Router;
 import by.epam.lab.entity.Car;
-import by.epam.lab.exceptions.DAOException;
-import by.epam.lab.mvc_layers.dao.impl.CarDAO;
+import by.epam.lab.exceptions.ServiceLayerException;
 import by.epam.lab.mvc_layers.service.IService;
+import by.epam.lab.mvc_layers.service.impl.CarServiceImpl;
 import by.epam.lab.utils.ConfigurationManager;
 
 public class CreateCatalogCommand implements ActionCommand {
@@ -23,13 +23,13 @@ public class CreateCatalogCommand implements ActionCommand {
 	public Router execute(HttpServletRequest request) {
 		Router router = new Router();
 		try {
-			IService<Car> carDao = new CarDAO();
-			List<Car> cars = carDao.getAll();
+			IService<Car> carService = new CarServiceImpl();
+			List<Car> cars = carService.getAll();
 			request.setAttribute("cars", cars);
 			router = new Router(ConfigurationManager.getProperty("path.page.main"));
 			return router;
 
-		} catch (DAOException e) {
+		} catch (ServiceLayerException e) {
 			logger.log(Level.INFO, "DAOException in " + this.getClass() + ": " + e);
 			router = new Router(ConfigurationManager.getProperty("path.page.index"));
 		}

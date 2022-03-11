@@ -19,9 +19,11 @@ import by.epam.lab.entity.Order;
 import by.epam.lab.entity.User;
 import by.epam.lab.entity.Order.ConfirmationStatus;
 import by.epam.lab.exceptions.DAOException;
+import by.epam.lab.mvc_layers.dao.AbstractDAO;
+import by.epam.lab.mvc_layers.dao.AbstractOrderDAO;
 import by.epam.lab.utils.DAOConstants;
 
-public class OrderDAO extends AbstractDAO<Order> {
+public class OrderDAOImpl extends AbstractOrderDAO {
 
 	private static final Logger logger = LogManager.getLogger();
 
@@ -34,7 +36,7 @@ public class OrderDAO extends AbstractDAO<Order> {
 	private static final String SQL_FIND_NOT_CONSIDERED_ORDERS = "SELECT id_order,user_id,car_id,start_date,end_date,price,is_paid,confirmation_status_id,rejection_reason FROM orders WHERE confirmation_status_id=1";
 	private static final String SQL_CONFIRM_ORDER = "UPDATE orders SET confirmation_status_id=2 WHERE id_order=?";
 	private static final String SQL_REJECT_ORDER = "UPDATE orders SET confirmation_status_id=3 WHERE id_order=?";
-	private static final String SQL_ADD_ORDER = "INSERT INTO orders (id_order,user_id,car_id,start_date,end_date,price,is_paid,confirmation_status_id,rejection_reason) values(?,?,?,?,?,?,?,?)";
+	private static final String SQL_ADD_ORDER = "INSERT INTO orders (user_id,car_id,start_date,end_date,price,is_paid,confirmation_status_id,rejection_reason) values(?,?,?,?,?,?,?,?)";
 	private static final String SQL_CHANGE_START_DATE = "UPDATE orders SET start_date=? WHERE id_order=?";
 	private static final String SQL_CHANGE_END_DATE = "UPDATE orders SET end_date=? WHERE id_order=?";
 	private static final String SQL_CHANGE_CONFIRMATION_STATUS = "UPDATE orders SET confirmation_status_id=? WHERE id_order=?";
@@ -43,127 +45,141 @@ public class OrderDAO extends AbstractDAO<Order> {
 	private static final String SQL_CHANGE_PRICE = "UPDATE orders SET price=? WHERE id_order=?";
 	private static final String SQL_DELETE_RDER = "delete from orders where id_order=?";
 
-	public OrderDAO(Connection connection) {
+	public OrderDAOImpl(Connection connection) {
 		super(connection);
 	}
 
 	@Override
 	public List<Order> getAll() throws DAOException {
 
-		List<Order> orders = new ArrayList<>();
-
 		try (
 
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery(SQL_FIND_ALL_ORDERS)) {
 
+			List<Order> orders = new ArrayList<>();
+
 			while (resultSet.next()) {
 				orders.add(create(resultSet));
 			}
 
+			return orders;
+
 		} catch (SQLException e) {
 			throw new DAOException();
 		}
-		return orders;
 	}
 
 	public List<Order> getOrdersOfUser(int id) throws DAOException {
-		List<Order> orders = new ArrayList<>();
 
 		try (
 
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery(SQL_FIND_ORDERS_OF_USER)) {
 
+			List<Order> orders = new ArrayList<>();
+
 			while (resultSet.next()) {
 				orders.add(create(resultSet));
 			}
 
+			return orders;
+
 		} catch (SQLException e) {
 			throw new DAOException();
 		}
-		return orders;
 	}
 
 	public List<Order> getOrdersForCar(int id) throws DAOException {
-		List<Order> orders = new ArrayList<>();
 
 		try (
 
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery(SQL_FIND_OEDER_FOR_CAR)) {
 
+			List<Order> orders = new ArrayList<>();
+
 			while (resultSet.next()) {
 				orders.add(create(resultSet));
 			}
 
+			return orders;
+
 		} catch (SQLException e) {
 			throw new DAOException();
 		}
-		return orders;
 	}
 
+	@Override
 	public List<Order> getPaidOrders() throws DAOException {
-		List<Order> orders = new ArrayList<>();
 
 		try (
 
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery(SQL_FIND_PAID_ORDERS)) {
 
+			List<Order> orders = new ArrayList<>();
+
 			while (resultSet.next()) {
 				orders.add(create(resultSet));
 			}
 
+			return orders;
+
 		} catch (SQLException e) {
 			throw new DAOException();
 		}
-		return orders;
 	}
 
+	@Override
 	public List<Order> getUnpaidOrders() throws DAOException {
-		List<Order> orders = new ArrayList<>();
 
 		try (
 
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery(SQL_FIND_UNPAID_ORDERS)) {
 
+			List<Order> orders = new ArrayList<>();
+
 			while (resultSet.next()) {
 				orders.add(create(resultSet));
 			}
 
+			return orders;
+
 		} catch (SQLException e) {
 			throw new DAOException();
 		}
-		return orders;
 	}
 
+	@Override
 	public List<Order> getNotConsidered() throws DAOException {
-		List<Order> orders = new ArrayList<>();
 
 		try (
 
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery(SQL_FIND_NOT_CONSIDERED_ORDERS)) {
 
+			List<Order> orders = new ArrayList<>();
+
 			while (resultSet.next()) {
 				orders.add(create(resultSet));
 			}
 
+			return orders;
+
 		} catch (SQLException e) {
 			throw new DAOException();
 		}
-		return orders;
 	}
 
 	@Override
 	public Optional<Order> getEntityById(int id) throws DAOException {
 		logger.log(Level.INFO, "Find car by id = " + id);
 
-		Optional<Order> order = Optional.empty();
-
 		try (PreparedStatement statement = connection.prepareStatement(SQL_FIND_ORDER_BY_ID)) {
+
+			Optional<Order> order = Optional.empty();
 
 			statement.setInt(1, id);
 
@@ -173,13 +189,14 @@ public class OrderDAO extends AbstractDAO<Order> {
 				order = Optional.of(create(resultSet));
 			}
 
+			return order;
+
 		} catch (SQLException e) {
 			throw new DAOException("Dao exception", e);
 		}
-
-		return order;
 	}
 
+	@Override
 	public boolean confirmOrder(int id) throws DAOException {
 		try (PreparedStatement statement = connection.prepareStatement(SQL_CONFIRM_ORDER)) {
 
@@ -204,6 +221,7 @@ public class OrderDAO extends AbstractDAO<Order> {
 		}
 	}
 
+	@Override
 	public boolean changeStartDate(Date date, int id) throws DAOException {
 
 		try (PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_START_DATE)) {
@@ -220,6 +238,7 @@ public class OrderDAO extends AbstractDAO<Order> {
 		}
 	}
 
+	@Override
 	public boolean changeEndDate(Date date, int id) throws DAOException {
 
 		try (PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_END_DATE)) {
@@ -236,6 +255,7 @@ public class OrderDAO extends AbstractDAO<Order> {
 		}
 	}
 
+	@Override
 	public boolean changeConfirmationStatus(int status, int id) throws DAOException {
 
 		try (PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_CONFIRMATION_STATUS)) {
@@ -250,6 +270,7 @@ public class OrderDAO extends AbstractDAO<Order> {
 		}
 	}
 
+	@Override
 	public boolean changeIsPaidStatus(boolean status, int id) throws DAOException {
 		try (PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_IS_PAID_STATUS)) {
 
@@ -263,6 +284,7 @@ public class OrderDAO extends AbstractDAO<Order> {
 		}
 	}
 
+	@Override
 	public boolean changeCar(int carId, int id) throws DAOException {
 		try (PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_CAR)) {
 
@@ -276,6 +298,7 @@ public class OrderDAO extends AbstractDAO<Order> {
 		}
 	}
 
+	@Override
 	public boolean changePrice(int price, int id) throws DAOException {
 
 		try (PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_PRICE)) {
@@ -290,6 +313,7 @@ public class OrderDAO extends AbstractDAO<Order> {
 		}
 	}
 
+	@Override
 	public boolean addOrder(Order order) throws DAOException {
 
 		try (PreparedStatement statement = connection.prepareStatement(SQL_ADD_ORDER)) {
@@ -297,21 +321,21 @@ public class OrderDAO extends AbstractDAO<Order> {
 			java.sql.Date sqlStatrtDate = new java.sql.Date(order.getStartDate().getTime());
 			java.sql.Date sqlEndDate = new java.sql.Date(order.getEndDate().getTime());
 
-			statement.setInt(1, order.getId());
-			statement.setInt(2, order.getUser().getId());
-			statement.setInt(3, order.getCar().getId());
-			statement.setDate(4, sqlStatrtDate);
-			statement.setDate(5, sqlEndDate);
-			statement.setInt(6, order.getPrice());
-			statement.setBoolean(7, order.getIsPaidStatus());
-			statement.setInt(8, order.getConfirmationStatus().ordinal() + 1);
-			statement.setString(9, order.getRejectionReason());
+			statement.setInt(1, order.getUser().getId());
+			statement.setInt(2, order.getCar().getId());
+			statement.setDate(3, sqlStatrtDate);
+			statement.setDate(4, sqlEndDate);
+			statement.setInt(5, order.getPrice());
+			statement.setBoolean(6, order.getIsPaidStatus());
+			statement.setInt(7, order.getConfirmationStatus().ordinal() + 1);
+			statement.setString(8, order.getRejectionReason());
+			statement.executeUpdate();
+
+			return true;
 
 		} catch (SQLException e) {
-			throw new DAOException();
+			throw new DAOException(e);
 		}
-
-		return false;
 	}
 
 	@Override
@@ -330,8 +354,8 @@ public class OrderDAO extends AbstractDAO<Order> {
 	@Override
 	public Order create(ResultSet resultSet) throws SQLException, DAOException {
 
-		AbstractDAO<User> userDao = new UserDAO(connection);
-		AbstractDAO<Car> carDao = new CarDAO(connection);
+		AbstractDAO<User> userDao = new UserDAOImpl(connection);
+		AbstractDAO<Car> carDao = new CarDAOImpl(connection);
 
 		int idOrder = resultSet.getInt(DAOConstants.ID_ORDER);
 

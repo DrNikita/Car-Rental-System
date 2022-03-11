@@ -29,7 +29,7 @@ public enum CommandEnum {
 	},
 	ADD_PASSPORT_DATA {
 		{
-			this.command = new AddPaddpassportDataCommand();
+			this.command = new AddPaassportDataCommand();
 		}
 	},
 	BOOK_CAR {

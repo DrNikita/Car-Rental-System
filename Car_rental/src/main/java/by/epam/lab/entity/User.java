@@ -1,5 +1,7 @@
 package by.epam.lab.entity;
 
+import java.util.Objects;
+
 public class User extends Entity {
 
 	private static final long serialVersionUID = 1L;
@@ -91,6 +93,37 @@ public class User extends Entity {
 
 	public void setPassportIdentificationNumber(String passportIdentificationNumber) {
 		this.passportIdentificationNumber = passportIdentificationNumber;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result
+				+ Objects.hash(email, name, passportIdentificationNumber, passportNumber, phone, role, secondName);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		return Objects.equals(email, other.email) && Objects.equals(name, other.name)
+				&& Objects.equals(passportIdentificationNumber, other.passportIdentificationNumber)
+				&& Objects.equals(passportNumber, other.passportNumber) && Objects.equals(phone, other.phone)
+				&& role == other.role && Objects.equals(secondName, other.secondName);
+	}
+
+	@Override
+	public String toString() {
+		return "User [role=" + role + ", name=" + name + ", secondName=" + secondName + ", email=" + email + ", phone="
+				+ phone + ", passportNumber=" + passportNumber + ", passportIdentificationNumber="
+				+ passportIdentificationNumber + "]";
 	}
 
 	public static class Builder {

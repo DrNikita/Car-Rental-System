@@ -3,6 +3,9 @@ package by.epam.lab.entity;
 import java.util.Objects;
 
 public class Brand extends Entity {
+
+	private static final long serialVersionUID = 1L;
+
 	private String brand;
 	private String model;
 

@@ -15,9 +15,10 @@ import org.apache.logging.log4j.Logger;
 
 import by.epam.lab.entity.Brand;
 import by.epam.lab.exceptions.DAOException;
+import by.epam.lab.mvc_layers.dao.AbstractBrandDAO;
 import by.epam.lab.utils.DAOConstants;
 
-public class BrandDAO extends AbstractDAO<Brand> {
+public class BrandDAOImpl extends AbstractBrandDAO {
 
 	private static final Logger logger = LogManager.getLogger();
 
@@ -25,7 +26,7 @@ public class BrandDAO extends AbstractDAO<Brand> {
 	private static final String SQL_GET_BRAND_BY_ID = "SELECT id_brand,brand,model FROM brands WHERE id_brand=?";
 	private static final String SQL_DELETE_BRAND = "DELETE FROM brands WHERE id_brand=?";
 
-	public BrandDAO(Connection connection) {
+	public BrandDAOImpl(Connection connection) {
 		super(connection);
 	}
 
@@ -33,12 +34,12 @@ public class BrandDAO extends AbstractDAO<Brand> {
 	public List<Brand> getAll() throws DAOException {
 		logger.log(Level.INFO, "Find all cars");
 
-		List<Brand> cars = new ArrayList<Brand>();
-
 		try (
 
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery(SQL_GET_ALL_BRANDS)) {
+
+			List<Brand> cars = new ArrayList<Brand>();
 
 			while (resultSet.next()) {
 				cars.add(create(resultSet));
@@ -56,9 +57,9 @@ public class BrandDAO extends AbstractDAO<Brand> {
 	public Optional<Brand> getEntityById(int id) throws DAOException {
 		logger.log(Level.INFO, "Find car by id = " + id);
 
-		Optional<Brand> brand = null;
-
 		try (PreparedStatement statement = connection.prepareStatement(SQL_GET_BRAND_BY_ID)) {
+
+			Optional<Brand> brand = Optional.empty();
 
 			statement.setInt(1, id);
 			ResultSet resultSet = statement.executeQuery();
@@ -66,11 +67,11 @@ public class BrandDAO extends AbstractDAO<Brand> {
 				brand = Optional.of(create(resultSet));
 			}
 
+			return brand;
+
 		} catch (SQLException e) {
 			throw new DAOException("Dao exception", e);
 		}
-
-		return brand;
 	}
 
 	@Override

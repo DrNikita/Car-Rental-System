@@ -1,6 +1,6 @@
 package by.epam.lab.exceptions;
 
-public class DAOException extends Throwable {
+public class DAOException extends Exception {
 
 	public DAOException() {
 		super();

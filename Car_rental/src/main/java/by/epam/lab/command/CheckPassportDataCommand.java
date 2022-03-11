@@ -4,8 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import by.epam.lab.controller.Router;
 import by.epam.lab.entity.User;
-import by.epam.lab.mvc_layers.dao.impl.UserDAO;
-import by.epam.lab.mvc_layers.service.IService;
 import by.epam.lab.utils.EntityesManager;
 import by.epam.lab.utils.ServletPaths;
 
@@ -13,6 +11,9 @@ public class CheckPassportDataCommand implements ActionCommand {
 
 	@Override
 	public Router execute(HttpServletRequest request) {
+
+		request.getSession().setAttribute(EntityesManager.getProperty("car_id"),
+				request.getParameter(EntityesManager.getProperty("car_id")));
 
 		Router router = new Router();
 

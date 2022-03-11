@@ -1,6 +1,6 @@
 package by.epam.lab.exceptions;
 
-public class ServiceLayerException extends Throwable {
+public class ServiceLayerException extends Exception {
 
 	public ServiceLayerException() {
 		super();

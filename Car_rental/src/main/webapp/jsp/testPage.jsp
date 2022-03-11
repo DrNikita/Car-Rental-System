@@ -7,7 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>${format.format(std)}</h1>
-	<h2>${format.format(ed)}</h2>
+	<h1>${order.toString()}</h1>
 </body>
 </html>

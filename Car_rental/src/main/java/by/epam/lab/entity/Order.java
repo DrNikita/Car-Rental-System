@@ -2,7 +2,6 @@ package by.epam.lab.entity;
 
 import java.util.Date;
 import java.util.Objects;
-import java.util.Optional;
 
 public class Order extends Entity {
 
@@ -36,6 +35,14 @@ public class Order extends Entity {
 		this.confirmationStatus = confirmationStatus;
 		this.rejectionReason = rejectionReason;
 		this.isPaid = isPaid;
+	}
+
+	public int getFullPrice() {
+
+		long milliseconds = this.endDate.getTime() - this.startDate.getTime();
+		int days = (int) (milliseconds / (24 * 60 * 60 * 1000));
+
+		return days * this.car.getPrice();
 	}
 
 	public User getUser() {

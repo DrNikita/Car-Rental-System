@@ -1,4 +1,4 @@
-package by.epam.lab.mvc_layers.dao.impl;
+package by.epam.lab.mvc_layers.dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -39,6 +39,16 @@ public abstract class AbstractDAO<T extends Entity> {
 			}
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "Statement closin error.");
+		}
+	}
+
+	public void close(Connection connection) throws DAOException {
+		try {
+			if (connection != null) {
+				connection.close();
+			}
+		} catch (SQLException e) {
+			throw new DAOException();
 		}
 	}
 }
