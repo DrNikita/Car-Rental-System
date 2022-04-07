@@ -99,7 +99,7 @@ public class Damage extends Entity {
 			this.damage = new Damage();
 		}
 
-		public Builder setOrderId(int id) {
+		public Builder setDamageId(int id) {
 			damage.setId(id);
 			return this;
 		}

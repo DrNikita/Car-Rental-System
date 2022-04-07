@@ -15,11 +15,13 @@ import org.apache.logging.log4j.Logger;
 
 import by.epam.lab.command.ActionCommand;
 import by.epam.lab.command.ActionFactory;
-import by.epam.lab.utils.ConfigurationManager;
-import by.epam.lab.utils.MessageManager;
+import by.epam.lab.property_manager.ConfigurationManager;
+import by.epam.lab.property_manager.MessageManager;
 
 @WebServlet("/controller")
 public class FrontController extends HttpServlet {
+
+	private static final long serialVersionUID = 1L;
 
 	private static final Logger logger = LogManager.getLogger();
 
@@ -43,14 +45,12 @@ public class FrontController extends HttpServlet {
 		switch (router.getType()) {
 
 		case FORWARD:
-			logger.log(Level.DEBUG, "forward from frontC");
 			RequestDispatcher dispatcher = request.getRequestDispatcher(router.getPagePath());
 			dispatcher.forward(request, response);
 			break;
 
 		case REDIRECT:
-			logger.log(Level.DEBUG, "redirect from frontC");
-			response.sendRedirect(router.getPagePath());
+			response.sendRedirect(request.getContextPath() + router.getPagePath());
 			break;
 
 		default:

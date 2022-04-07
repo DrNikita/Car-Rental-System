@@ -22,12 +22,13 @@ public final class DAOConstants {
 	public static final String CAR_IMAGE_LINK = "image_link";
 	public static final String CAR_YEAR_OF_ISSUE = "year_of_issue";
 	public static final String ID_ORDER = "id_order";
-	public static final String ORDER_USER_ID = "user_id";
-	public static final String ORDER_CAR_ID = "car_id";
+	public static final String USER_ID = "user_id";
+	public static final String CAR_ID = "car_id";
 	public static final String ORDER_START_DATE = "start_date";
 	public static final String ORDER_END_DATE = "end_date";
-	public static final String ORDER_PRICE = "price";
-	public static final String ORDER_IS_PAID_STATUS = "is_paid";
+	public static final String PRICE = "price";
+	public static final String DAMAGE_DESCRIPTION = "description";
+	public static final String IS_PAID_STATUS = "is_paid";
 	public static final String ORDER_CONFIRMATION_STATUS_ID = "confirmation_status_id";
 	public static final String ORDER_REJECTION_REASON = "rejection_reason";
 

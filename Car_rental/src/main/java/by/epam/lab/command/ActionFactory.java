@@ -2,7 +2,7 @@ package by.epam.lab.command;
 
 import javax.servlet.http.HttpServletRequest;
 
-import by.epam.lab.utils.MessageManager;
+import by.epam.lab.property_manager.MessageManager;
 
 public class ActionFactory {
 	public ActionCommand defineCommand(HttpServletRequest request) {

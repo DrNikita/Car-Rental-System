@@ -7,6 +7,7 @@ public class Router {
 
 	public enum RouteType {
 		FORWARD, REDIRECT;
+
 	}
 
 	public Router() {

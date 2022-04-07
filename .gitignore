@@ -1,6 +1,8 @@
 .metadata/
-.settings/
-build
 Servers
+.settings/
+logs
+target
 .classpath
 .project
+pom.xml

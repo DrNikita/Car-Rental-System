@@ -1,11 +1,14 @@
-@charset "ISO-8859-1";
+@charset "UTF-8";
 
-.imgBox {
-	height: 400 px;
-	width: 400 px;
+.goods {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
 }
 
-.cars { 
-	width: 20px;
-	background: red;
+.good {
+	margin-bottom: 30px;
+}
+
+body {
+	background: orange;
 }

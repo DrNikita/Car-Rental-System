@@ -1,0 +1,14 @@
+@charset "UTF-8";
+
+* {
+	background-color: lime;
+}
+
+.orders {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+}
+
+.order {
+	margin-bottom: 30px;
+}

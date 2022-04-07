@@ -109,6 +109,14 @@ public class Order extends Entity {
 		this.isPaid = isPaid;
 	}
 
+	public boolean isConfirmed() {
+		if (confirmationStatus == ConfirmationStatus.CONFIRMED) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

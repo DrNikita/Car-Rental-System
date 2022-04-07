@@ -12,6 +12,12 @@ public class Brand extends Entity {
 	public Brand() {
 	}
 
+	public Brand(String brand, String model) {
+		super();
+		this.brand = brand;
+		this.model = model;
+	}
+
 	public Brand(int id, String brand, String model) {
 		super(id);
 		this.brand = brand;

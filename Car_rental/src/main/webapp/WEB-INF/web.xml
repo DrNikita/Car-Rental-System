@@ -47,5 +47,14 @@
 		<welcome-file-list>
 			<welcome-file>index.jsp</welcome-file>
 		</welcome-file-list>
+		<listener>
+			<listener-class>ContextListener</listener-class>
+		</listener>
+		<jsp-config>
+			<taglib>
+				<taglib-uri>customtags</taglib-uri>
+				<taglib-location>/WEB-INF/tld/custom.tld</taglib-location>
+			</taglib>
+		</jsp-config>
 	</web-app>
 </absolute-ordering>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib version="2.1" xmlns="http://java.sun.com/xml/ns/javaee"
+
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd">
+
+	<tlib-version>1.0</tlib-version>
+	<short-name>ctg</short-name>
+	<uri>customtags</uri>
+	<body-content>scriptless</body-content>
+
+	<tag>
+		<name>submitCommand</name>
+		<tag-class>by.epam.lab.tag.custom.CommandSubmitButton</tag-class>
+
+		<attribute>
+			<name>command</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>key</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>submitAction</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+</taglib>

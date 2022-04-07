@@ -15,7 +15,7 @@ public class User extends Entity {
 	private String passportIdentificationNumber;
 
 	public enum Role {
-		USER, MANAGER;
+		USER, MANAGER, GUEST;
 	}
 
 	public User() {
