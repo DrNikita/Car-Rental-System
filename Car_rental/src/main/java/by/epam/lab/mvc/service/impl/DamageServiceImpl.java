@@ -53,7 +53,7 @@ public class DamageServiceImpl implements IDamageService {
 		try (WrapperConnector connector = new WrapperConnector();
 				DamageDAOImpl damageDao = new DamageDAOImpl(connector.getConnection());) {
 
-			return damageDao.addDamage(damage);
+			return damageDao.addEntity(damage);
 
 		} catch (DAOException e) {
 			logger.log(Level.ERROR, "DAOException in " + this.getClass().getName() + ": " + e);

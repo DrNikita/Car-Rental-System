@@ -7,7 +7,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.epam.lab.command.ActionCommand;
-import by.epam.lab.controller.Router;
+import by.epam.lab.command.router.ErrorRouter;
+import by.epam.lab.command.router.ForwardRouter;
+import by.epam.lab.command.router.Router;
 import by.epam.lab.entity.Order;
 import by.epam.lab.exceptions.ServiceLayerException;
 import by.epam.lab.mvc.service.IOrderService;
@@ -29,16 +31,15 @@ public class ReturnCarCommand implements ActionCommand {
 			if (order != null) {
 				orderService.delete(order.getId());
 				logger.log(Level.INFO, "Car " + order.getCar().getId() + " was returnd.");
-				return new Router(ConfigurationManager.getProperty("path.page.to_manager_main"));
+				return new ForwardRouter(ConfigurationManager.getProperty("path.page.to_manager_main"));
 
 			} else {
 				logger.log(Level.INFO, this.getClass().getName() + ": Order wasn't fount.");
-				return new Router(ConfigurationManager.getProperty("path.page.to_manager_main"));
+				return new ForwardRouter(ConfigurationManager.getProperty("path.page.to_manager_main"));
 			}
 		} catch (ServiceLayerException e) {
 			logger.log(Level.ERROR, "ServiceException in method execute " + e);
-			request.setAttribute("nullPage", "Page not found. Business logic error.");
-			return new Router(ConfigurationManager.getProperty("path.page.error"));
+			return new ErrorRouter(e);
 		}
 	}
 }

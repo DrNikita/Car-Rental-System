@@ -8,22 +8,22 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import by.epam.lab.property_manager.EntityesManager;
 
 @SuppressWarnings("serial")
 public class CommandSubmitButton extends TagSupport {
 
-	private static final Logger logger = LogManager.getLogger();
 	private String command;
+	private String method;
 	private String key;
 	private String submitkAction;
 
 	public void setCommand(String command) {
 		this.command = command;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
 	}
 
 	public void setKey(String key) {
@@ -39,14 +39,23 @@ public class CommandSubmitButton extends TagSupport {
 
 		try {
 
-			logger.log(Level.INFO, "writing info");
-
 			JspWriter out = pageContext.getOut();
 
-			if (submitkAction == null) {
-				out.write("<form action=\"/Car_rental/controller\">");
+			if (submitkAction != null) {
+
+				if (method != null) {
+					out.write("<form method=\"" + method + "\" onsubmit=\"" + submitkAction + "\">");
+				} else {
+					out.write("<form action=\"/Car_rental/controller\" onsubmit=\"" + submitkAction + "\">");
+				}
+
 			} else {
-				out.write("<form onsubmit=\"" + submitkAction + "\">");
+
+				if (method != null) {
+					out.write("<form action=\"/Car_rental/controller\" method=\"" + method + "\">");
+				} else {
+					out.write("<form action=\"/Car_rental/controller\">");
+				}
 			}
 
 			out.write("<input type=\"hidden\" name=\"command\" value=\"" + command + "\">");

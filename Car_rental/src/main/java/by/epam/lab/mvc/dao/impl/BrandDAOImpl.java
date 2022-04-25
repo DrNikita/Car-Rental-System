@@ -77,7 +77,7 @@ public class BrandDAOImpl extends AbstractDAO<Brand> implements BrandDAO {
 	}
 
 	@Override
-	public boolean addBrand(Brand brand) throws DAOException {
+	public boolean addEntity(Brand brand) throws DAOException {
 		logger.log(Level.INFO, "Adding brand to the db" + brand);
 
 		try (PreparedStatement statement = connection.prepareStatement(SQL_ADD_BRAND)) {

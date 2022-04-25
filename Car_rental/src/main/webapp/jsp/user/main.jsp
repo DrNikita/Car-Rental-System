@@ -18,8 +18,6 @@
 <body>
 
 	<ctg:submitCommand key="title.log_out" command="logout" />
-	<br>
-	<br>
 
 	<div class="goods">
 		<c:forEach var="car" items="${cars}" varStatus="status">

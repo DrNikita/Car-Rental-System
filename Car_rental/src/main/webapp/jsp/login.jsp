@@ -32,42 +32,41 @@
 	</table>
 
 	<tr>
-		<h1>
-			<td><fmt:message key="title.app_name" />
-		</h1>
-	<tr>
+		<td><h1>
+				<fmt:message key="title.app_name" />
+			</h1></td>
+	</tr>
 
-		<table>
-			<tr>
-				<td><ctg:submitCommand key="title.log_in" command="login">
+	<table>
+		<tr>
+			<td><ctg:submitCommand key="title.log_in" command="login"
+					method="post">
+
+					<table>
+
+						<tr>
+							<td><fmt:message key="title.email" /> :
+							<td><input type="text" name="email" />
+						</tr>
+
+						<tr>
+							<td><fmt:message key="title.password" /> :
+							<td><input type="password" name="password" />
+						</tr>
 
 						<table>
-
 							<tr>
-								<td><fmt:message key="title.email" /> :
-								<td><input type="text" name="email" />
-							</tr>
-
+								<td>${errorLoginPassMessage}
 							<tr>
-								<td><fmt:message key="title.password" /> :
-								<td><input type="password" name="password" />
-							</tr>
-
-							<table>
-								<tr>
-									<td>${errorLoginPassMessage}
-								<tr>
-									<td>${wrongAction}
-								<tr>
-									<td>${nullPage}
-							</table>
-
 						</table>
 
-					</ctg:submitCommand>
-				<td><ctg:submitCommand key="title.registration"
-						command="to_registration_page" />
-			</tr>
-		</table>
+					</table>
+
+				</ctg:submitCommand>
+			<td><ctg:submitCommand key="title.registration"
+					command="to_registration_page" />
+		</tr>
+	</table>
+
 </body>
 </html>

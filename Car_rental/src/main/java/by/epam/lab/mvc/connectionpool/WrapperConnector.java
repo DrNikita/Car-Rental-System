@@ -15,10 +15,8 @@ public class WrapperConnector implements AutoCloseable {
 	private static final Logger logger = LogManager.getLogger();
 
 	private final Connection connection;
-//	private final static ConnectionPool CONNECTION_POOL = ConnectionPool.getInstance();
 
 	public WrapperConnector() {
-//		connection = CONNECTION_POOL.getConnection();
 		connection = ContextListener.connectionPool.getConnection();
 	}
 
@@ -63,7 +61,6 @@ public class WrapperConnector implements AutoCloseable {
 	}
 
 	public void close() {
-//		CONNECTION_POOL.releaseConnection(connection);
 		ContextListener.connectionPool.releaseConnection(connection);
 	}
 }

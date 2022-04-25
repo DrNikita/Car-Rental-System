@@ -60,7 +60,7 @@
 	<p id="errorText"></p>
 
 	<ctg:submitCommand key="title.ok" command="add_passport_data"
-		submitAction="return infoValidation(this)">
+		submitAction="return infoValidation(this)" method="post">
 
 		<table>
 

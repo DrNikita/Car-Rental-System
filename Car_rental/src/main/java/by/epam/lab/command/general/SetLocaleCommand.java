@@ -5,9 +5,10 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 
 import by.epam.lab.command.ActionCommand;
-import by.epam.lab.controller.Router;
+import by.epam.lab.command.router.ForwardRouter;
+import by.epam.lab.command.router.Router;
+import by.epam.lab.property_manager.ConfigurationManager;
 import by.epam.lab.property_manager.EntityesManager;
-import by.epam.lab.utils.ServletPaths;
 
 public class SetLocaleCommand implements ActionCommand {
 
@@ -26,6 +27,6 @@ public class SetLocaleCommand implements ActionCommand {
 
 		request.getSession().setAttribute(EntityesManager.getProperty("locale"), locale);
 
-		return new Router(ServletPaths.LOGIN_PAGE);
+		return new ForwardRouter(ConfigurationManager.getProperty("path.page.login"));
 	}
 }

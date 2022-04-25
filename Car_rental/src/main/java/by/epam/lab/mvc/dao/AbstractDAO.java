@@ -21,6 +21,8 @@ public abstract class AbstractDAO<T extends Entity> implements AutoCloseable {
 
 	public abstract Optional<T> getEntityById(int id) throws DAOException;
 
+	public abstract boolean addEntity(T entity) throws DAOException;
+
 	public abstract boolean delete(int id) throws DAOException;
 
 	public abstract T create(ResultSet resultSet) throws DAOException, SQLException;

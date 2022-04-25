@@ -80,7 +80,7 @@ public class DamageDAOImpl extends AbstractDAO<Damage> implements DamageDAO {
 	}
 
 	@Override
-	public boolean addDamage(Damage damage) throws DAOException {
+	public boolean addEntity(Damage damage) throws DAOException {
 
 		try (PreparedStatement statement = connection.prepareStatement(SQL_ADD_DAMAGE)) {
 

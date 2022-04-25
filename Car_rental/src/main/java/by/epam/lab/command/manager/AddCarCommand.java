@@ -9,7 +9,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.epam.lab.command.ActionCommand;
-import by.epam.lab.controller.Router;
+import by.epam.lab.command.router.ErrorRouter;
+import by.epam.lab.command.router.ForwardRouter;
+import by.epam.lab.command.router.Router;
 import by.epam.lab.entity.Brand;
 import by.epam.lab.entity.Car;
 import by.epam.lab.exceptions.ServiceLayerException;
@@ -34,6 +36,10 @@ public class AddCarCommand implements ActionCommand {
 			int year = Integer.parseInt(request.getParameter(EntityesManager.getProperty("year")));
 			int price = Integer.parseInt(request.getParameter(EntityesManager.getProperty("price")));
 			String imageLink = request.getParameter(EntityesManager.getProperty("image"));
+
+			if (brand == null || model == null || imageLink == null) {
+				return new ErrorRouter("Null data.");
+			}
 
 			Brand brandObj = new Brand.Builder().setBrand(brand).setModel(model).build();
 
@@ -72,16 +78,15 @@ public class AddCarCommand implements ActionCommand {
 
 			logger.log(Level.INFO, "Car " + car + " was added");
 
-			return new Router(ConfigurationManager.getProperty("path.page.goods"));
+			return new ForwardRouter(ConfigurationManager.getProperty("path.page.goods"));
 
 		} catch (ServiceLayerException e) {
 			logger.log(Level.ERROR, "Service exception in " + this.getClass().getName() + ": ", e);
-			return new Router(ConfigurationManager.getProperty("path.page.error"));
+			return new ErrorRouter(e);
 
 		} catch (NumberFormatException e) {
-			request.setAttribute("error", e);
 			logger.log(Level.ERROR, "incorrect carId.", e);
-			return new Router(ConfigurationManager.getProperty("path.page.error"));
+			return new ErrorRouter(e);
 		}
 	}
 }

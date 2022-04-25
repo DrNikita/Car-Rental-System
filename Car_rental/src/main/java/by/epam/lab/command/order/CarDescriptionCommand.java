@@ -9,14 +9,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.epam.lab.command.ActionCommand;
-import by.epam.lab.controller.Router;
+import by.epam.lab.command.router.ErrorRouter;
+import by.epam.lab.command.router.ForwardRouter;
+import by.epam.lab.command.router.Router;
 import by.epam.lab.entity.Car;
 import by.epam.lab.exceptions.ServiceLayerException;
 import by.epam.lab.mvc.service.ICarService;
 import by.epam.lab.mvc.service.impl.CarServiceImpl;
 import by.epam.lab.property_manager.ConfigurationManager;
 import by.epam.lab.property_manager.EntityesManager;
-import by.epam.lab.utils.ServletPaths;
 
 public class CarDescriptionCommand implements ActionCommand {
 
@@ -34,21 +35,21 @@ public class CarDescriptionCommand implements ActionCommand {
 
 			if (car.isPresent()) {
 				request.getSession().setAttribute(EntityesManager.getProperty("car"), car.get());
-				return new Router(ServletPaths.CAR_DESCRIPTION_PAGE);
+				return new ForwardRouter(ConfigurationManager.getProperty("path.page.car_description"));
 
 			} else {
-				logger.log(Level.INFO, "Car  wasn't found");
-				return new Router(ServletPaths.MAIN);
+				logger.log(Level.ERROR, "Car  wasn't found");
+				return new ForwardRouter(ConfigurationManager.getProperty("path.command.main"));
 			}
 
 		} catch (ServiceLayerException e) {
-			logger.log(Level.ERROR, "Service exception in " + this.getClass().getName() + ": ", e);
-			return new Router(ConfigurationManager.getProperty("path.page.error"));
+
+			logger.log(Level.ERROR, e);
+			return new ErrorRouter(e);
 
 		} catch (NumberFormatException e) {
-			request.setAttribute("error", e);
 			logger.log(Level.ERROR, "incorrect carId.", e);
-			return new Router(ConfigurationManager.getProperty("path.page.error"));
+			return new ErrorRouter(e);
 		}
 	}
 }

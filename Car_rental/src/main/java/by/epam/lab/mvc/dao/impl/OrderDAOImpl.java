@@ -43,7 +43,7 @@ public class OrderDAOImpl extends AbstractDAO<Order> implements OrderDAO {
 	private static final String SQL_CHANGE_IS_PAID_STATUS = "UPDATE orders SET is_paid=? WHERE id_order=?";
 	private static final String SQL_CHANGE_CAR = "UPDATE orders SET car_id=? WHERE id_order=?";
 	private static final String SQL_CHANGE_PRICE = "UPDATE orders SET price=? WHERE id_order=?";
-	private static final String SQL_DELETE_RDER = "delete from orders where id_order=?";
+	private static final String SQL_DELETE_ORDER = "delete from orders where id_order=?";
 
 	public OrderDAOImpl(Connection connection) {
 		super(connection);
@@ -325,7 +325,7 @@ public class OrderDAOImpl extends AbstractDAO<Order> implements OrderDAO {
 	}
 
 	@Override
-	public boolean addOrder(Order order) throws DAOException {
+	public boolean addEntity(Order order) throws DAOException {
 
 		try (PreparedStatement statement = connection.prepareStatement(SQL_ADD_ORDER)) {
 
@@ -352,7 +352,7 @@ public class OrderDAOImpl extends AbstractDAO<Order> implements OrderDAO {
 	@Override
 	public boolean delete(int id) throws DAOException {
 
-		try (PreparedStatement statement = connection.prepareStatement(SQL_DELETE_RDER)) {
+		try (PreparedStatement statement = connection.prepareStatement(SQL_DELETE_ORDER)) {
 
 			statement.setInt(1, id);
 			statement.executeUpdate();

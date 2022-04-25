@@ -8,6 +8,6 @@
 <title>Start JSP</title>
 </head>
 <body>
-	<c:redirect url="/controller?command=to_login_page" />
+	<jsp:forward page="/jsp/login.jsp" />
 </body>
 </html>

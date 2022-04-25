@@ -9,7 +9,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.epam.lab.command.ActionCommand;
-import by.epam.lab.controller.Router;
+import by.epam.lab.command.router.ErrorRouter;
+import by.epam.lab.command.router.ForwardRouter;
+import by.epam.lab.command.router.Router;
 import by.epam.lab.entity.Order;
 import by.epam.lab.entity.User;
 import by.epam.lab.exceptions.ServiceLayerException;
@@ -19,7 +21,6 @@ import by.epam.lab.mvc.service.impl.OrderServiceImpl;
 import by.epam.lab.mvc.service.impl.UserServiceImpl;
 import by.epam.lab.property_manager.ConfigurationManager;
 import by.epam.lab.property_manager.EntityesManager;
-import by.epam.lab.utils.ServletPaths;
 
 public class OrderInformationCommand implements ActionCommand {
 
@@ -44,24 +45,22 @@ public class OrderInformationCommand implements ActionCommand {
 					request.getSession().setAttribute(EntityesManager.getProperty("order"), order.get());
 					request.setAttribute(EntityesManager.getProperty("user"), user.get());
 
-					return new Router(ServletPaths.ORDER_INFORMATION_PAGE);
+					return new ForwardRouter(ConfigurationManager.getProperty("path.page.order_info"));
 				}
 
-				return new Router(ServletPaths.MANAGER_MAIN_PAGE);
+				return new ForwardRouter(ConfigurationManager.getProperty("path.page.manager_main"));
 
 			} else {
-				return new Router(ServletPaths.MANAGER_MAIN_PAGE);
+				return new ForwardRouter(ConfigurationManager.getProperty("path.page.manager_main"));
 			}
 
 		} catch (ServiceLayerException e) {
 			logger.log(Level.ERROR, "ServiceException in method execute " + e);
-			request.setAttribute("nullPage", "Page not found. Business logic error.");
-			return new Router(ConfigurationManager.getProperty("path.page.error"));
+			return new ErrorRouter(e);
 
 		} catch (NumberFormatException e) {
 			logger.log(Level.ERROR, "Incorrect order id: " + e);
-			request.setAttribute("nullPage", "Page not found. Business logic error.");
-			return new Router(ConfigurationManager.getProperty("path.page.error"));
+			return new ErrorRouter(e);
 		}
 	}
 }

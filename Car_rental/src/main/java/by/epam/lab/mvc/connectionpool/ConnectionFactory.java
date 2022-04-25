@@ -28,18 +28,22 @@ public class ConnectionFactory {
 	static {
 		try (InputStream inputStream = ConnectionFactory.class.getClassLoader()
 				.getResourceAsStream(DATABASE_PROPERTIES)) {
+
 			PROPERTIES.load(inputStream);
 			DATABASE_URL = PROPERTIES.getProperty(PROPERTY_URL);
 			DATABASE_PASSWORD = PROPERTIES.getProperty(PROPERTY_PASSWORD);
 			DATABASE_USER = PROPERTIES.getProperty(PROPERTY_USER);
 			DATABASE_DRIVER = PROPERTIES.getProperty(PROPERTY_DRIVER);
 			Class.forName(DATABASE_DRIVER);
+
 		} catch (FileNotFoundException e) {
 			logger.log(Level.FATAL, "FileNotFoundException " + e.getMessage());
 			throw new RuntimeException(e);
+
 		} catch (IOException e) {
 			logger.log(Level.FATAL, "IOException " + e.getMessage());
 			throw new RuntimeException(e);
+
 		} catch (ClassNotFoundException e) {
 			logger.log(Level.FATAL, "driver: " + PROPERTIES.getProperty(PROPERTY_DRIVER) + "not found");
 			throw new RuntimeException(e);

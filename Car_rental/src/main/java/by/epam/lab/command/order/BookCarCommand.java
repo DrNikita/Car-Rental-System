@@ -11,7 +11,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.epam.lab.command.ActionCommand;
-import by.epam.lab.controller.Router;
+import by.epam.lab.command.router.ErrorRouter;
+import by.epam.lab.command.router.ForwardRouter;
+import by.epam.lab.command.router.Router;
 import by.epam.lab.entity.Car;
 import by.epam.lab.entity.Order;
 import by.epam.lab.entity.Order.ConfirmationStatus;
@@ -19,8 +21,8 @@ import by.epam.lab.entity.User;
 import by.epam.lab.exceptions.ServiceLayerException;
 import by.epam.lab.mvc.service.IOrderService;
 import by.epam.lab.mvc.service.impl.OrderServiceImpl;
+import by.epam.lab.property_manager.ConfigurationManager;
 import by.epam.lab.property_manager.EntityesManager;
-import by.epam.lab.utils.ServletPaths;
 
 public class BookCarCommand implements ActionCommand {
 
@@ -30,16 +32,16 @@ public class BookCarCommand implements ActionCommand {
 	public Router execute(HttpServletRequest request) {
 
 		try {
+
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
-			Car car = (Car) request.getSession().getAttribute(EntityesManager.getProperty("car"));
-
-			User user = (User) request.getSession().getAttribute(EntityesManager.getProperty("user"));
-
 			Date startDate = format.parse(request.getParameter(EntityesManager.getProperty("start_date")));
 			Date endDate = format.parse(request.getParameter(EntityesManager.getProperty("end_date")));
 
-			if (car != null && user != null) {
+			Car car = (Car) request.getSession().getAttribute(EntityesManager.getProperty("car"));
+			User user = (User) request.getSession().getAttribute(EntityesManager.getProperty("user"));
+
+			if (car != null && user != null && startDate != null && endDate != null) {
+
 				Order order = new Order.Builder().setUser(user).setCar(car).setStartDate(startDate).setEndDate(endDate)
 						.setIsPaidStatus(false).setConfirmationStatus(ConfirmationStatus.CONSIDERED).build();
 
@@ -48,19 +50,20 @@ public class BookCarCommand implements ActionCommand {
 				IOrderService orderService = new OrderServiceImpl();
 				orderService.addOrder(order);
 
-				return new Router(ServletPaths.MAIN);
+				return new ForwardRouter(ConfigurationManager.getProperty("path.command.main"));
 
 			} else {
-				logger.log(Level.INFO, this.getClass().getName() + ": car or user not in session.");
-				return new Router(ServletPaths.MAIN);
+				logger.log(Level.INFO, "Car or user not in session.");
+				return new ForwardRouter(ConfigurationManager.getProperty("path.command.main"));
 			}
 
 		} catch (ParseException e) {
-			logger.log(Level.INFO, this.getClass().getName() + ": incorrect dates.");
-			return new Router(ServletPaths.LOGIN_PAGE);
+			logger.log(Level.ERROR, e);
+			return new ErrorRouter(e);
+
 		} catch (ServiceLayerException e) {
-			logger.log(Level.INFO, this.getClass().getName() + ": " + e);
-			return new Router(ServletPaths.LOGIN_PAGE);
+			logger.log(Level.ERROR, e);
+			return new ErrorRouter(e);
 		}
 	}
 }

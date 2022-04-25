@@ -35,6 +35,4 @@ public interface OrderDAO {
 	public boolean changeCar(int carId, int orderId) throws DAOException;
 
 	public boolean changePrice(int price, int orderId) throws DAOException;
-
-	public boolean addOrder(Order order) throws DAOException;
 }

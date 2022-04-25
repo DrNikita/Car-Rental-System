@@ -13,16 +13,18 @@ public class ActionFactory {
 
 		if (action == null || action.isEmpty()) {
 			return current;
+
+		} else {
+
+			try {
+				CommandEnum currentEnum = CommandEnum.valueOf(action.toUpperCase());
+				current = currentEnum.getCurrentCommand();
+
+			} catch (IllegalArgumentException e) {
+				request.setAttribute("wrongAction", action + MessageManager.getProperty("message.wrongaction"));
+			}
+
+			return current;
 		}
-
-		try {
-			CommandEnum currentEnum = CommandEnum.valueOf(action.toUpperCase());
-			current = currentEnum.getCurrentCommand();
-
-		} catch (IllegalArgumentException e) {
-			request.setAttribute("wrongAction", action + MessageManager.getProperty("message.wrongaction"));
-		}
-
-		return current;
 	}
 }

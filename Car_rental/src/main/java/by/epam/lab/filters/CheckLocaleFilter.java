@@ -34,7 +34,6 @@ public class CheckLocaleFilter extends HttpFilter implements Filter {
 			throws IOException, ServletException {
 
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
-		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		HttpSession session = httpRequest.getSession();
 
 		Locale locale = (Locale) session.getAttribute(EntityesManager.getProperty("locale"));

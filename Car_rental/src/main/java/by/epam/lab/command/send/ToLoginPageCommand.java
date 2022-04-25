@@ -3,14 +3,14 @@ package by.epam.lab.command.send;
 import javax.servlet.http.HttpServletRequest;
 
 import by.epam.lab.command.ActionCommand;
-import by.epam.lab.controller.Router;
-import by.epam.lab.utils.ServletPaths;
+import by.epam.lab.command.router.ForwardRouter;
+import by.epam.lab.command.router.Router;
+import by.epam.lab.property_manager.ConfigurationManager;
 
 public class ToLoginPageCommand implements ActionCommand {
 
 	@Override
 	public Router execute(HttpServletRequest request) {
-		return new Router(ServletPaths.LOGIN_PAGE);
+		return new ForwardRouter(ConfigurationManager.getProperty("path.page.login"));
 	}
-
 }

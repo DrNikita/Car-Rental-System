@@ -7,13 +7,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.epam.lab.command.ActionCommand;
-import by.epam.lab.controller.Router;
+import by.epam.lab.command.router.ErrorRouter;
+import by.epam.lab.command.router.ForwardRouter;
+import by.epam.lab.command.router.Router;
+import by.epam.lab.entity.Order;
 import by.epam.lab.exceptions.ServiceLayerException;
 import by.epam.lab.mvc.service.IOrderService;
 import by.epam.lab.mvc.service.impl.OrderServiceImpl;
 import by.epam.lab.property_manager.ConfigurationManager;
 import by.epam.lab.property_manager.EntityesManager;
-import by.epam.lab.utils.ServletPaths;
 
 public class CancelOrderCommand implements ActionCommand {
 
@@ -24,18 +26,22 @@ public class CancelOrderCommand implements ActionCommand {
 
 		try {
 
-			IOrderService orderService = new OrderServiceImpl();
-			int orderId = Integer.parseInt(request.getParameter(EntityesManager.getProperty("order_id")));
-			orderService.delete(orderId);
-			return new Router(ServletPaths.MAIN);
+			Order order = (Order) request.getSession().getAttribute(EntityesManager.getProperty("order"));
+
+			if (order != null) {
+				IOrderService orderService = new OrderServiceImpl();
+				orderService.delete(order.getId());
+				return new ForwardRouter(ConfigurationManager.getProperty("path.command.main"));
+
+			} else {
+				logger.log(Level.ERROR, "User not in the session.");
+				return new ForwardRouter();
+			}
 
 		} catch (ServiceLayerException e) {
+
 			logger.log(Level.ERROR, "Service exception in " + this.getClass().getName() + ": ", e);
-			return new Router(ConfigurationManager.getProperty("path.page.error"));
-		} catch (NumberFormatException e) {
-			request.setAttribute("error", e);
-			logger.log(Level.ERROR, "incorrect order id in " + this.getClass().getName() + ": ", e);
-			return new Router(ConfigurationManager.getProperty("path.page.error"));
+			return new ErrorRouter(e);
 		}
 	}
 }

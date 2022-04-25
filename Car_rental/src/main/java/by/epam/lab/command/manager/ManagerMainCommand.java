@@ -7,13 +7,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.epam.lab.command.ActionCommand;
-import by.epam.lab.controller.Router;
+import by.epam.lab.command.router.ErrorRouter;
+import by.epam.lab.command.router.ForwardRouter;
+import by.epam.lab.command.router.Router;
 import by.epam.lab.exceptions.ServiceLayerException;
 import by.epam.lab.mvc.service.IOrderService;
 import by.epam.lab.mvc.service.impl.OrderServiceImpl;
 import by.epam.lab.property_manager.ConfigurationManager;
 import by.epam.lab.property_manager.EntityesManager;
-import by.epam.lab.utils.ServletPaths;
 
 public class ManagerMainCommand implements ActionCommand {
 
@@ -24,12 +25,13 @@ public class ManagerMainCommand implements ActionCommand {
 
 		try {
 			IOrderService orderService = new OrderServiceImpl();
-			request.getSession().setAttribute(EntityesManager.getProperty("orders"), orderService.getAll());
-			return new Router(ServletPaths.MANAGER_MAIN_PAGE);
+			request.setAttribute(EntityesManager.getProperty("orders"), orderService.getAll());
+			return new ForwardRouter(ConfigurationManager.getProperty("path.page.manager_main"));
+
 		} catch (ServiceLayerException e) {
+
 			logger.log(Level.ERROR, "SesrviceException in method execute " + e);
-			request.setAttribute("nullPage", "Page not found. Business logic error.");
-			return new Router(ConfigurationManager.getProperty("path.page.error"));
+			return new ErrorRouter(e);
 		}
 	}
 }

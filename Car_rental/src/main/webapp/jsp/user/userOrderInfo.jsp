@@ -63,6 +63,10 @@
 				</c:if></td>
 		</tr>
 
+		<tr>
+			<ctg:submitCommand key="title.cancel" command="cancel_order" />
+		</tr>
+
 	</table>
 
 </body>

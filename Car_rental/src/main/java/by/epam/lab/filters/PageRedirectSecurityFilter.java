@@ -39,5 +39,4 @@ public class PageRedirectSecurityFilter extends HttpFilter implements Filter {
 	public void init(FilterConfig fConfig) throws ServletException {
 		indexPath = fConfig.getInitParameter("INDEX_PATH");
 	}
-
 }

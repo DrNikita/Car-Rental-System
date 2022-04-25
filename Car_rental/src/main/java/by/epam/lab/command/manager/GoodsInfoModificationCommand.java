@@ -9,7 +9,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.epam.lab.command.ActionCommand;
-import by.epam.lab.controller.Router;
+import by.epam.lab.command.router.ErrorRouter;
+import by.epam.lab.command.router.ForwardRouter;
+import by.epam.lab.command.router.Router;
 import by.epam.lab.entity.Brand;
 import by.epam.lab.entity.Car;
 import by.epam.lab.exceptions.ServiceLayerException;
@@ -36,7 +38,7 @@ public class GoodsInfoModificationCommand implements ActionCommand {
 
 			if (car == null) {
 				logger.log(Level.INFO, this.getClass().getName() + ": Car wasn't found in session.");
-				return new Router(ConfigurationManager.getProperty("command.get_goods"));
+				return new ForwardRouter(ConfigurationManager.getProperty("command.get_goods"));
 			}
 
 			switch (parameter) {
@@ -76,14 +78,12 @@ public class GoodsInfoModificationCommand implements ActionCommand {
 				break;
 			}
 
-			return new Router(ConfigurationManager.getProperty("command.get_goods"));
+			return new ForwardRouter(ConfigurationManager.getProperty("command.get_goods"));
 
 		} catch (ServiceLayerException e) {
 
 			logger.log(Level.ERROR, "ServiceException in method execute " + e);
-			request.setAttribute("nullPage", "Page not found. Business logic error.");
-			request.setAttribute("error", e);
-			return new Router(ConfigurationManager.getProperty("path.page.error"));
+			return new ErrorRouter(e);
 		}
 	}
 }

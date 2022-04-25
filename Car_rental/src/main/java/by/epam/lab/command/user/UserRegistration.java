@@ -7,7 +7,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.epam.lab.command.ActionCommand;
-import by.epam.lab.controller.Router;
+import by.epam.lab.command.router.ErrorRouter;
+import by.epam.lab.command.router.ForwardRouter;
+import by.epam.lab.command.router.Router;
 import by.epam.lab.entity.User;
 import by.epam.lab.entity.User.Role;
 import by.epam.lab.exceptions.ServiceLayerException;
@@ -15,7 +17,6 @@ import by.epam.lab.mvc.service.IUserService;
 import by.epam.lab.mvc.service.impl.UserServiceImpl;
 import by.epam.lab.property_manager.ConfigurationManager;
 import by.epam.lab.property_manager.EntityesManager;
-import by.epam.lab.utils.ServletPaths;
 
 public class UserRegistration implements ActionCommand {
 
@@ -41,27 +42,26 @@ public class UserRegistration implements ActionCommand {
 
 				if (userService.getUserByEmail(email).isPresent()) {
 
-					request.setAttribute("existedUser", "User with this email is already exists.");
+					request.setAttribute("existedUser", "User with this email already exists.");
 					logger.log(Level.INFO, "incorrect email in registration form");
-					return new Router(ServletPaths.REGISTRATION_PAGE);
+					return new ForwardRouter(ConfigurationManager.getProperty("path.page.registration"));
 
 				} else {
 
 					userService.addUser(user, password);
 					logger.log(Level.INFO, "User was registrated");
-					return new Router(ServletPaths.LOGIN_PAGE);
+					return new ForwardRouter(ConfigurationManager.getProperty("path.page.login"));
 				}
 
 			} else {
 				logger.log(Level.INFO, "Registration error");
-				request.setAttribute("registrationError", "Registration error");
-				return new Router(ServletPaths.LOGIN_PAGE);
+				return new ForwardRouter(ConfigurationManager.getProperty("path.page.registration"));
 			}
 
 		} catch (ServiceLayerException e) {
-			request.setAttribute("registrationError", "registration error");
+
 			logger.log(Level.ERROR, "Service exception in " + this.getClass().getName() + ": ", e);
-			return new Router(ConfigurationManager.getProperty("path.page.error"));
+			return new ErrorRouter(e);
 		}
 	}
 }

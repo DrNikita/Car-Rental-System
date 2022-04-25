@@ -57,8 +57,6 @@ public class ServletSecurityFilter extends HttpFilter implements Filter {
 			RequestDispatcher dispatcher = request.getServletContext()
 					.getRequestDispatcher(ConfigurationManager.getProperty("path.page.login"));
 			dispatcher.forward(httpRequest, httpResponce);
-
-			return;
 		}
 
 		chain.doFilter(request, response);

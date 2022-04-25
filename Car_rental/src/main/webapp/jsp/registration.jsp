@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="<c:url value="/css/style.css"/>">
 </head>
 <body>
+
 	<div class="products" style="background-color: #E6F9E6;">
 		<tr>
 			<td><br></td>
@@ -30,7 +31,7 @@
 				<p id="errorText"></p>
 
 				<ctg:submitCommand key="title.register" command="user_registration"
-					submitAction="return infoValidation(this)">
+					submitAction="return infoValidation(this)" method="post">
 
 					<table>
 						<tr>
@@ -165,5 +166,4 @@
 		}
 	}
 </script>
-
 </html>

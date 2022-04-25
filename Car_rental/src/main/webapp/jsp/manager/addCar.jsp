@@ -19,7 +19,7 @@
 	<p id="errorText"></p>
 
 	<ctg:submitCommand key="title.add" command="add_car"
-		submitAction="return infoValidation(this)">
+		submitAction="return infoValidation(this)" method="post">
 
 		<table>
 			<tr>

@@ -19,7 +19,8 @@
 	<p id="errorText"></p>
 
 	<ctg:submitCommand key="title.register_damage"
-		command="register_damage" submitAction="return infoValidation(this)">
+		command="register_damage" submitAction="return infoValidation(this)"
+		method="post">
 
 		<table>
 

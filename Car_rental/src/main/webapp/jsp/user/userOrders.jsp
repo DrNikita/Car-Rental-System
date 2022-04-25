@@ -15,6 +15,7 @@
 <title><fmt:message key="title.cart" /></title>
 </head>
 <body>
+
 	<div class="orders">
 		<c:forEach var="order" items="${orders}" varStatus="status">
 			<div class="good">
@@ -24,19 +25,8 @@
 				</div>
 
 				<div class="order">
-					<c:if test="">
-						<form action="<c:url value="/controller"/>">
-							<input type="hidden" name="command" value="pay_order"> <input
-								type="hidden" name="carId" value="${car.getId()}"> <input
-								type="submit" value="<fmt:message key="title.pay"/>">
-						</form>
-					</c:if>
 
 					<ctg:submitCommand key="title.info" command="user_order_info">
-						<input type="hidden" name="orderId" value="${order.getId()}">
-					</ctg:submitCommand>
-
-					<ctg:submitCommand key="title.cancel" command="cancel_order">
 						<input type="hidden" name="orderId" value="${order.getId()}">
 					</ctg:submitCommand>
 
@@ -44,5 +34,6 @@
 			</div>
 		</c:forEach>
 	</div>
+
 </body>
 </html>

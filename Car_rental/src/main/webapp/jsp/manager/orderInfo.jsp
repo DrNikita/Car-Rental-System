@@ -79,7 +79,8 @@
 		</table>
 
 		<tr>
-			<td><ctg:submitCommand key="title.accept" command="accept_order" /></td>
+			<td><ctg:submitCommand key="title.accept" command="accept_order"
+					method="post" /></td>
 		</tr>
 
 		<table id="reason">
@@ -144,6 +145,7 @@
 
 		form.setAttribute("action", '<c:url value="/controller"/>');
 		form.setAttribute("onSubmit", "return infoValidation(this)");
+		form.setAttribute("method", "post");
 
 		td.appendChild(form);
 		tr.appendChild(td);
@@ -174,7 +176,9 @@
 		var yesForm = document.createElement('form');
 		var noForm = document.createElement('form');
 		yesForm.setAttribute("action", '<c:url value="/controller" />');
+		yesForm.setAttribute("method", "post");
 		noForm.setAttribute("action", '<c:url value="/controller" />');
+		noForm.setAttribute("method", "post");
 
 		var yesCommand = document.createElement('input');
 		var noCommand = document.createElement('input');

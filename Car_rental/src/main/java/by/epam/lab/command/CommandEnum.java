@@ -1,5 +1,7 @@
 package by.epam.lab.command;
 
+import by.epam.lab.command.general.LoginCommand;
+import by.epam.lab.command.general.LogoutCommand;
 import by.epam.lab.command.general.SetLocaleCommand;
 import by.epam.lab.command.manager.AcceptOrderCommand;
 import by.epam.lab.command.manager.AddCarCommand;
@@ -23,8 +25,7 @@ import by.epam.lab.command.send.ToPaymentMakingCommand;
 import by.epam.lab.command.send.ToRegistrationPageCommand;
 import by.epam.lab.command.user.CancelOrderCommand;
 import by.epam.lab.command.user.CreateCatalogCommand;
-import by.epam.lab.command.user.LoginCommand;
-import by.epam.lab.command.user.LogoutCommand;
+import by.epam.lab.command.user.PayDamageCommand;
 import by.epam.lab.command.user.PayOrderCommand;
 import by.epam.lab.command.user.UserOrderInfoCommand;
 import by.epam.lab.command.user.UserOrdersCommand;
@@ -144,6 +145,11 @@ public enum CommandEnum {
 	PAY_ORDER {
 		{
 			this.command = new PayOrderCommand();
+		}
+	},
+	PAY_DAMAGE {
+		{
+			this.command = new PayDamageCommand();
 		}
 	},
 	TO_PASSPORT_DATA_INPUT {

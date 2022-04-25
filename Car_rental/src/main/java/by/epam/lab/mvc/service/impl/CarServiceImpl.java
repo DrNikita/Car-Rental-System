@@ -46,7 +46,7 @@ public class CarServiceImpl implements ICarService {
 		try (WrapperConnector connector = new WrapperConnector();
 				CarDAOImpl carDao = new CarDAOImpl(connector.getConnection())) {
 
-			return carDao.addCar(car);
+			return carDao.addEntity(car);
 
 		} catch (DAOException e) {
 			throw new ServiceLayerException(e);

@@ -9,7 +9,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.epam.lab.command.ActionCommand;
-import by.epam.lab.controller.Router;
+import by.epam.lab.command.router.ErrorRouter;
+import by.epam.lab.command.router.ForwardRouter;
+import by.epam.lab.command.router.Router;
 import by.epam.lab.entity.Order;
 import by.epam.lab.exceptions.ServiceLayerException;
 import by.epam.lab.mvc.service.IOrderService;
@@ -31,20 +33,22 @@ public class UserOrderInfoCommand implements ActionCommand {
 			Optional<Order> order = orderService.getEntityById(orderId);
 
 			if (order.isPresent()) {
-				request.setAttribute(EntityesManager.getProperty("order"), order.get());
-				return new Router(ConfigurationManager.getProperty("path.page.user_order_info"));
+
+				request.getSession().setAttribute(EntityesManager.getProperty("order"), order.get());
+				return new ForwardRouter(ConfigurationManager.getProperty("path.page.user_order_info"));
 
 			} else {
-				return new Router(ConfigurationManager.getProperty("path.page.main"));
+				logger.log(Level.ERROR, "Order with id: " + orderId + " wasn't found.");
+				return new ForwardRouter(ConfigurationManager.getProperty("path.page.main"));
 			}
 
 		} catch (ServiceLayerException e) {
-			logger.log(Level.ERROR, "Service exception in " + this.getClass().getName() + ": ", e);
-			return new Router(ConfigurationManager.getProperty("path.page.error"));
+			logger.log(Level.ERROR, e);
+			return new ErrorRouter(e);
+
 		} catch (NumberFormatException e) {
-			request.setAttribute("error", e);
-			logger.log(Level.ERROR, "incorrect order id in " + this.getClass().getName() + ": ", e);
-			return new Router(ConfigurationManager.getProperty("path.page.error"));
+			logger.log(Level.ERROR, e);
+			return new ErrorRouter(e);
 		}
 	}
 }

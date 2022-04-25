@@ -7,14 +7,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.epam.lab.command.ActionCommand;
-import by.epam.lab.controller.Router;
+import by.epam.lab.command.router.ErrorRouter;
+import by.epam.lab.command.router.ForwardRouter;
+import by.epam.lab.command.router.Router;
 import by.epam.lab.entity.Order;
 import by.epam.lab.exceptions.ServiceLayerException;
 import by.epam.lab.mvc.service.IOrderService;
 import by.epam.lab.mvc.service.impl.OrderServiceImpl;
 import by.epam.lab.property_manager.ConfigurationManager;
 import by.epam.lab.property_manager.EntityesManager;
-import by.epam.lab.utils.ServletPaths;
 
 public class AcceptOrderCommand implements ActionCommand {
 
@@ -32,19 +33,17 @@ public class AcceptOrderCommand implements ActionCommand {
 				IOrderService orderService = new OrderServiceImpl();
 				orderService.confirmOrder(order.getId());
 				logger.log(Level.INFO, this.getClass().getName() + ": Order: " + order.getId() + " was accepted.");
-				return new Router(ServletPaths.MANAGER_MAIN);
+				return new ForwardRouter(ConfigurationManager.getProperty("path.command.manager_main"));
 
 			} else {
 				logger.log(Level.INFO, this.getClass().getName() + ": order wosn't found.");
-				return new Router(ServletPaths.MANAGER_MAIN);
+				return new ForwardRouter(ConfigurationManager.getProperty("path.command.manager_main"));
 			}
 
 		} catch (ServiceLayerException e) {
 
 			logger.log(Level.ERROR, "ServiceException in method execute " + e);
-			request.setAttribute("nullPage", "Page not found. Business logic error.");
-			return new Router(ConfigurationManager.getProperty("path.page.error"));
-
+			return new ErrorRouter(e);
 		}
 	}
 }

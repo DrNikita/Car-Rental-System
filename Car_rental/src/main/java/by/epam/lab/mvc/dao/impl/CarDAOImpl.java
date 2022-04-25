@@ -38,7 +38,7 @@ public class CarDAOImpl extends AbstractDAO<Car> implements CarDAO {
 	}
 
 	@Override
-	public boolean addCar(Car car) throws DAOException {
+	public boolean addEntity(Car car) throws DAOException {
 		logger.log(Level.INFO, "Adding car to the db" + car);
 
 		try (PreparedStatement statement = connection.prepareStatement(SQL_ADD_CAR)) {

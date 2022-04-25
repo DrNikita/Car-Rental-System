@@ -32,6 +32,7 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 	private static final String SQL_FIND_USER_BY_ID = "SELECT id_user,role_id,name,second_name,email,phone,passport_number,passport_identification_number FROM users WHERE id_user=?";
 	private static final String SQL_CHANGE_PASSPORT_DATA = "UPDATE users SET passport_number=?,passport_identification_number=? where id_user=?";
 	private static final String SQL_FIND_USER_BY_EMAIL_PASSWORD = "SELECT id_user,role_id,name,second_name,email,phone,passport_number,passport_identification_number FROM users WHERE (email=?) AND (password=?)";
+	private static final String SQL_DELETE_USER = "delete from users where id_user=?";
 
 	public UserDAOImpl(Connection connection) {
 		super(connection);
@@ -185,30 +186,6 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 	}
 
 	@Override
-	public boolean addUser(User user, String password) throws DAOException {
-
-		logger.log(Level.INFO, "Try to add user in db" + user);
-
-		try (PreparedStatement statement = connection.prepareStatement(SQL_ADD_USER)) {
-
-			statement.setInt(1, user.getRole().ordinal() + 1);
-			statement.setString(2, user.getName());
-			statement.setString(3, user.getSecondName());
-			statement.setString(4, user.getEmail());
-			statement.setString(5, user.getPhone());
-			statement.setString(6, Encode.encodePassword(password));
-			statement.setString(7, user.getPassportNumber());
-			statement.setString(8, user.getPassportIdentificationNumber());
-			statement.executeUpdate();
-			return true;
-
-		} catch (SQLException e) {
-			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
-			throw new DAOException("Dao exception in method addUser, when we try to add user:" + user, e);
-		}
-	}
-
-	@Override
 	public boolean changeName(String name, int id) throws DAOException {
 		// TODO Auto-generated method stub
 		return true;
@@ -255,9 +232,47 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 	}
 
 	@Override
+	public boolean addEntity(User user) throws DAOException {
+		// can't use this method as you can't add user in database without
+		// password
+		return false;
+	}
+
+	@Override
+	public boolean addUser(User user, String password) throws DAOException {
+
+		logger.log(Level.INFO, "Try to add user in db" + user);
+
+		try (PreparedStatement statement = connection.prepareStatement(SQL_ADD_USER)) {
+
+			statement.setInt(1, user.getRole().ordinal() + 1);
+			statement.setString(2, user.getName());
+			statement.setString(3, user.getSecondName());
+			statement.setString(4, user.getEmail());
+			statement.setString(5, user.getPhone());
+			statement.setString(6, Encode.encodePassword(password));
+			statement.setString(7, user.getPassportNumber());
+			statement.setString(8, user.getPassportIdentificationNumber());
+			statement.executeUpdate();
+			return true;
+
+		} catch (SQLException e) {
+			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
+			throw new DAOException("Dao exception in method addUser, when we try to add user:" + user, e);
+		}
+	}
+
+	@Override
 	public boolean delete(int id) throws DAOException {
-		// TODO Auto-generated method stub
-		return true;
+		try (PreparedStatement statement = connection.prepareStatement(SQL_DELETE_USER)) {
+
+			statement.setInt(1, id);
+			statement.executeUpdate();
+			return true;
+
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		}
 	}
 
 	public User create(ResultSet resultSet) throws DAOException, SQLException {
@@ -278,6 +293,5 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 		logger.log(Level.INFO, "Found user id:" + "::FIO: " + " ");
 
 		return user;
-
 	}
 }

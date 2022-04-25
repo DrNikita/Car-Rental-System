@@ -228,7 +228,7 @@ public class OrderServiceImpl implements IOrderService {
 		try (WrapperConnector connector = new WrapperConnector();
 				OrderDAOImpl orderDao = new OrderDAOImpl(connector.getConnection())) {
 
-			return orderDao.addOrder(order);
+			return orderDao.addEntity(order);
 
 		} catch (DAOException e) {
 			throw new ServiceLayerException(e);

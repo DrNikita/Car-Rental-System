@@ -1,6 +1,5 @@
 package by.epam.lab.mvc.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,11 +19,7 @@ public class BrandServiceImpl implements IBrandService {
 		try (WrapperConnector connector = new WrapperConnector();
 				AbstractDAO<Brand> brandDao = new BrandDAOImpl(connector.getConnection())) {
 
-			List<Brand> brands = new ArrayList<>();
-
-			brands = brandDao.getAll();
-
-			return brands;
+			return brandDao.getAll();
 
 		} catch (DAOException e) {
 			throw new ServiceLayerException(e);
@@ -37,9 +32,7 @@ public class BrandServiceImpl implements IBrandService {
 		try (WrapperConnector connector = new WrapperConnector();
 				AbstractDAO<Brand> brandDao = new BrandDAOImpl(connector.getConnection())) {
 
-			Optional<Brand> brand = brandDao.getEntityById(id);
-
-			return brand;
+			return brandDao.getEntityById(id);
 
 		} catch (DAOException e) {
 			throw new ServiceLayerException(e);
@@ -65,9 +58,7 @@ public class BrandServiceImpl implements IBrandService {
 		try (WrapperConnector connector = new WrapperConnector();
 				BrandDAOImpl brandDao = new BrandDAOImpl(connector.getConnection())) {
 
-			brandDao.addBrand(brand);
-
-			return true;
+			return brandDao.addEntity(brand);
 
 		} catch (DAOException e) {
 			throw new ServiceLayerException(e);
@@ -80,9 +71,7 @@ public class BrandServiceImpl implements IBrandService {
 		try (WrapperConnector connector = new WrapperConnector();
 				AbstractDAO<Brand> brandDao = new BrandDAOImpl(connector.getConnection())) {
 
-			brandDao.delete(id);
-
-			return true;
+			return brandDao.delete(id);
 
 		} catch (DAOException e) {
 			throw new ServiceLayerException(e);
